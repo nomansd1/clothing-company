@@ -10,12 +10,12 @@ function Header() {
                     <img src={Cart} alt="logo" className='text-white'/>
                 </div>
                 <div className='flex flex-col ml-1.5 justify-center items-start'>
-                    <h1 className='text-base uppercase font-semibold'>martvill</h1>
+                    <h1 className='text-base uppercase font-semibold leading-3'>martvill</h1>
                     <p className='text-xs'>A platform to sell anything.</p>
                 </div>
             </div>
             <div className='flex items-center cursor-pointer'>
-                <img src={View} alt="view site" className='h-6 mr-1' />
+                <img src={View} alt="view site" className='h-6 mr-1 -scale-x-[1]' />
                 <h1>View Site</h1>
             </div>
         </div>
