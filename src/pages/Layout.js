@@ -1,7 +1,7 @@
 import React from 'react'
 import { Header, Tab } from '../components/index';
 
-function DashboardLayout() {
+function Layout() {
   return (
     <div>
       <Header/>
@@ -10,4 +10,4 @@ function DashboardLayout() {
   )
 }
 
-export default DashboardLayout
+export default Layout

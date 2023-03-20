@@ -2,7 +2,9 @@ import React from 'react'
 
 function OrderTab() {
   return (
-    <div>OrderTab</div>
+    <div>
+      <h1>order Tab</h1>      
+    </div>
   )
 }
 

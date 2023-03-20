@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-import DashboardLayout from './pages/DashboardLayout';
+import Layout from './pages/Layout';
 
 function App() {
   return (
     <div>
-      <DashboardLayout/>
+      <Layout/>
     </div>
   );
 }
