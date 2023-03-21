@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import Layout from './pages/Layout';
+import Layout from './pages/customer-dashboard/Layout';
 
 function App() {
   return (

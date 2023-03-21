@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BudgetRequestTab, CompanyProfileTab, EmployeesTab, DashboardTab, UserProfileTab, OrderTab } from '../pages/index'
+import { BudgetRequestTab, CompanyProfileTab, EmployeesTab, DashboardTab, UserProfileTab, OrderTab } from '../pages/customer-dashboard/index'
 
 function Tab() {
     const data = [

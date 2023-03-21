@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Tab } from '../components/index';
+import { Header, Tab } from '../../components/index';
 
 function Layout() {
   return (

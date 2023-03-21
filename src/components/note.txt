@@ -1,0 +1,33 @@
+// Customer Dashboard
+employee 
+1. s.no
+2. name
+3. dress size
+4. dress image
+5. shoe size
+6. Budget text box
+7. order -> button to add order
+
+order 
+1. table
+
+request Budget
+table
+1. sno
+2. name
+3. request Budget
+4. switch button
+5. input budget text box
+
+// Admin Dashboard
+same dashboard screen
+same order screen
+product page consist of form 
+product name
+product image
+category
+button submit order
+
+// login and signup page
+
+// landing page
