@@ -3,3 +3,4 @@ export { default as User } from "./user.svg";
 export { default as Carret } from "./carret.svg";
 export { default as View } from "./view.svg";
 export { default as Dashboard } from "./dashboard.svg";
+export { default as Product } from "./product.svg";
