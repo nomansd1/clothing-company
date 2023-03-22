@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Layout from './pages/customer-dashboard/Layout';
 import AdminLayout from './pages/admin-dashboard/AdminLayout'
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
