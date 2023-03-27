@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BudgetRequestTab, CompanyProfileTab, EmployeesTab, DashboardTab, CartTab, OrderTab } from '../pages/customer-dashboard/index'
+import { BudgetRequestTab, CompanyProfileTab, EmployeesTab, DashboardTab, CartTab, OrderTab, PastOrderTab } from '../pages/customer-dashboard/index'
 
 function Tab() {
     const data = [
@@ -11,7 +11,7 @@ function Tab() {
         {
             id: 2,
             icon: 'assignment',
-            label: 'Orders'
+            label: 'Order Now'
         },
         {
             id: 3,
@@ -32,7 +32,12 @@ function Tab() {
             id: 6,
             icon: 'trending_up',
             label: 'Request for Budget'
-        }
+        },
+        {
+            id: 7,
+            icon: 'inactive_order',
+            label: 'Past Orders'
+        },
     ];
     const [activeTab, setActiveTab] = useState(1);
 
@@ -62,6 +67,7 @@ function Tab() {
                 {activeTab === 4 && <EmployeesTab/>}
                 {activeTab === 5 && <CompanyProfileTab/>}
                 {activeTab === 6 && <BudgetRequestTab/>}
+                {activeTab === 7 && <PastOrderTab/>}
             </main>
         </div>
     )
