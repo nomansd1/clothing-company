@@ -5,8 +5,8 @@ function Header() {
     const [dropdown, setDropdown] = useState(false)
 
     return (
-        <div className='flex items-center justify-between bg-black text-white py-3 px-5'>
-            <div className='flex items-center lg:w-[35%] justify-between'>
+        <div className='fixed top-0 left-0 w-full flex items-center justify-between bg-black text-white py-3 px-5'>
+            <div className='relative flex items-center lg:w-[35%] justify-between'>
                 <div className='flex justify-center items-center'>
                     <div className='bg-white rounded-lg p-1'>
                         <img src={Cart} alt="logo" className='text-white' />
