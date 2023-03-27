@@ -4,7 +4,7 @@ import { Cart, User, Carret, View } from '../assets/images/index.js'
 function Header() {
   return (
     <div className='flex items-center justify-between bg-black text-white py-3 px-5'>
-        <div className='flex items-center w-[35%] justify-between'>
+        <div className='flex items-center lg:w-[35%] justify-between'>
             <div className='flex justify-center items-center'>
                 <div className='bg-white rounded-lg p-1'>
                     <img src={Cart} alt="logo" className='text-white'/>
@@ -14,7 +14,7 @@ function Header() {
                     <p className='text-xs'>A platform to sell anything.</p>
                 </div>
             </div>
-            <div className='flex items-center cursor-pointer'>
+            <div className='hidden lg:flex items-center cursor-pointer'>
                 <img src={View} alt="view site" className='h-6 mr-1 -scale-x-[1]' />
                 <h1>View Site</h1>
             </div>

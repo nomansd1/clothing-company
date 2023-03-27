@@ -1,0 +1,15 @@
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background: black;
+}
+/* @media (max-width: 639px) {
+    .transform {
+      @apply translate-x-0;
+    }
+  }
+   */
+  

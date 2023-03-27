@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BudgetRequestTab, CompanyProfileTab, EmployeesTab, DashboardTab, UserProfileTab, OrderTab } from '../pages/customer-dashboard/index'
+import { BudgetRequestTab, CompanyProfileTab, EmployeesTab, DashboardTab, CartTab, OrderTab } from '../pages/customer-dashboard/index'
 
 function Tab() {
     const data = [
@@ -15,8 +15,8 @@ function Tab() {
         },
         {
             id: 3,
-            icon: 'person',
-            label: 'My Profile'
+            icon: 'shopping_cart_checkout',
+            label: 'Cart'
         },
         {
             id: 4,
@@ -38,7 +38,7 @@ function Tab() {
 
     return (
         <div>
-            <aside className="fixed top-14 left-0 z-40 whitespace-nowrap w-14 hover:w-64 h-screen transition-all duration-500 ease-in-out transform -translate-x-full sm:translate-x-0">
+            <aside className="fixed top-14 left-0 z-40 whitespace-nowrap w-14 hover:w-64 h-screen transition-all duration-500 ease-in-out transform ">
                 <div className="h-full pl-3 py-4 overflow-y-auto bg-[#dfdfdf]">                    
                     <ul className="space-y-2 mt-7">
                         {/* Tabs Labels*/}
@@ -58,7 +58,7 @@ function Tab() {
             <main className="ml-14 h-[91vh] overflow-auto p-10">
                 {activeTab === 1 && <DashboardTab/>}
                 {activeTab === 2 && <OrderTab/>}
-                {activeTab === 3 && <UserProfileTab/>}
+                {activeTab === 3 && <CartTab/>}
                 {activeTab === 4 && <EmployeesTab/>}
                 {activeTab === 5 && <CompanyProfileTab/>}
                 {activeTab === 6 && <BudgetRequestTab/>}

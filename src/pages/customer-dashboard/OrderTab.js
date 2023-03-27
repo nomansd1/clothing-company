@@ -1,15 +1,29 @@
 import React, { useState } from 'react'
+import { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 } from '../../assets/images/index'
+import ProductDrawer from '../../components/ProductDrawer';
 
 function OrderTab() {
+  const [showDrawer, setShowDrawer] = useState(false);
+  const products = [
+    { id: 1, src: p1 },
+    { id: 2, src: p2 },
+    { id: 3, src: p3 },
+    { id: 4, src: p4 },
+    { id: 5, src: p5 },
+    { id: 6, src: p6 },
+    { id: 7, src: p7 },
+    { id: 8, src: p8 },
+    { id: 9, src: p9 },
+    { id: 10, src: p10 },
+    { id: 11, src: p11 },
+  ]
+  const Drawer = <ProductDrawer show={showDrawer} setShow={setShowDrawer} img={products} />
+
   const [tableData, setTableData] = useState([
     {
-      id: 1, name: 'Syed Noman Ali', dressSize: 12, dressImg: 'https://spng.pngfind.com/pngs/s/124-1245916_a-black-t-shirt-black-shirt-hd-png.png',
-      shoeSize: 23, budget: 100, action: 'Add Order'
+      id: 1, name: 'Syed Noman Ali', gender: 'male', productName: 'T shirt', productSize: 12, productImg: 'https://spng.pngfind.com/pngs/s/124-1245916_a-black-t-shirt-black-shirt-hd-png.png', 
+      budget: 100, action: 'Select Product'
     },
-    {
-      id: 2, name: 'Syed Hasnain Askari', dressSize: 18, dressImg: 'https://spng.pngfind.com/pngs/s/124-1245916_a-black-t-shirt-black-shirt-hd-png.png',
-      shoeSize: 21, budget: 400, action: 'Add Order'
-    }
   ])
   const [filterDrop, setFilterDrop] = useState(false);
   const [sortOrder, setSortOrder] = useState("ascending");
@@ -89,13 +103,16 @@ function OrderTab() {
                 Employee name
               </th>
               <th scope="col" className="px-6 py-3">
-                Dress Size
+                Gender
               </th>
               <th scope="col" className="px-6 py-3">
-                Dress Image
+                Product Name
               </th>
               <th scope="col" className="px-6 py-3">
-                Shoe Size
+                Product Size
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Product Image
               </th>
               <th scope="col" className="px-6 py-3">
                 Budget
@@ -115,11 +132,17 @@ function OrderTab() {
                   {row.name}
                 </th>
                 <td className="px-6 py-4">
-                  {row.dressSize}
+                  {row.gender}
+                </td>
+                <td className="px-6 py-4">
+                  {row.productName}
+                </td>
+                <td className="px-6 py-4">
+                  {row.productSize}
                 </td>
                 <td className="px-6 py-4 relative">
                   <div className='w-10 h-10 rounded-full cursor-pointer relative'>
-                    <img src={row.dressImg} alt="" className='w-full h-full rounded-full' />
+                    <img src={row.productImg} alt="" className='w-full h-full rounded-full' />
                     <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-75 flex justify-center items-center rounded-full transition-all duration-500 ease-in-out">
                       <span class="material-symbols-rounded text-3xl text-white">
                         fullscreen
@@ -128,15 +151,13 @@ function OrderTab() {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  {row.shoeSize}
-                </td>
-                <td className="px-6 py-4">
                   {row.budget}
                 </td>
                 <td className="px-6 py-4">
-                  <button className='p-1 bg-black text-white rounded-md text-xs'>
+                  <button className='p-1 bg-black text-white rounded-md text-xs' onClick={() => setShowDrawer(!showDrawer)}>
                     {row.action}
                   </button>
+                  {Drawer}
                 </td>
               </tr>
             ))}
