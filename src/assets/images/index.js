@@ -19,3 +19,4 @@ export { default as p9 } from "./BISILUX-DATA/BISILUX-Product-Images/T-Shirt-JN1
 export { default as p10 } from "./BISILUX-DATA/BISILUX-Product-Images/Winterjacke-JN824.jpg";
 export { default as p11 } from "./BISILUX-DATA/BISILUX-Product-Images/Winterweste-JN825.jpg";
 
+export { default as logo } from "./logo.jpg";
