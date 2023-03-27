@@ -20,3 +20,4 @@ export { default as p10 } from "./BISILUX-DATA/BISILUX-Product-Images/Winterjack
 export { default as p11 } from "./BISILUX-DATA/BISILUX-Product-Images/Winterweste-JN825.jpg";
 
 export { default as logo } from "./logo.jpg";
+export { default as login } from "./login.svg";
