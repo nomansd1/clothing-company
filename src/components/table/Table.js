@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { tableFunctions } from "../../global-functions/GlobalFunctions";
 import { type } from "@testing-library/user-event/dist/type";
+import Slider from "react-slick";
+import { tableStructureData } from "../../utils/TableStructureData";
 
-function Table({ tableData, setTableData, columns, tableTitle ,openDrawer}) {
+function Table({ tableData, setTableData, columns, tableTitle, openDrawer }) {
   const [filterDrop, setFilterDrop] = useState(false);
   const [sortOrder, setSortOrder] = useState("ascending");
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,6 +40,15 @@ function Table({ tableData, setTableData, columns, tableTitle ,openDrawer}) {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
+  let sliderSettings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: false,
+  };
+
   useEffect(() => {
     columns.forEach((element) => {
       if (element.type == "action") {
@@ -158,7 +169,7 @@ function Table({ tableData, setTableData, columns, tableTitle ,openDrawer}) {
             {filteredData.map((row) => (
               <tr key={row.id} className="bg-white border-b hover:bg-gray-50">
                 <td scope="col" className="px-2 py-3">
-                  {row.id}
+                  {row.SNO}
                 </td>
                 <th
                   scope="row"
@@ -168,25 +179,37 @@ function Table({ tableData, setTableData, columns, tableTitle ,openDrawer}) {
                 </th>
 
                 <td className="px-6 py-4 relative">
-                  <div className="w-10 h-10 rounded-full cursor-pointer relative">
-                    <img
-                      src={row.dressImg}
-                      alt=""
-                      className="w-full h-full rounded-full"
-                    />
-                    <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-75 flex justify-center items-center rounded-full transition-all duration-500 ease-in-out">
-                      <span class="material-symbols-rounded text-3xl text-white">
-                        fullscreen
-                      </span>
-                    </div>
-                  </div>
+                  <Slider {...sliderSettings} className=" w-full max-w-[200px]">
+                    {row.slider?.showProducts?.map((val, i) => {
+                      return val.products.map((val, i) => (
+                        <div
+                          key={val._id}
+                          className="w-10 h-10 max-w-[2.5rem] mx-2 rounded-md cursor-pointer relative"
+                        >
+                          <img
+                            src={val.productImage}
+                            alt=""
+                            className="w-full h-full rounded-md"
+                          />
+                          <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-75 flex justify-center items-center rounded-md transition-all duration-500 ease-in-out">
+                            <span class="material-symbols-rounded text-3xl text-white">
+                              {val.productName}
+                            </span>
+                          </div>
+                        </div>
+                      ));
+                    })}
+                  </Slider>
                 </td>
 
                 <td className="px-6 py-4">{row.budget}</td>
                 {typeSlider ? (
                   <td className="px-6 py-4">
-                    <button className="p-1 bg-black text-white rounded-md text-xs" onClick={() =>openDrawer()}>
-                      {row.slider}
+                    <button
+                      className="p-1 bg-black text-white rounded-md text-xs"
+                      onClick={() => openDrawer()}
+                    >
+                      {row.slider.name}
                     </button>
                   </td>
                 ) : (
@@ -194,14 +217,13 @@ function Table({ tableData, setTableData, columns, tableTitle ,openDrawer}) {
                 )}
                 {typeAction ? (
                   <td className="px-6 py-4">
-                    <button className="p-1 bg-black text-white rounded-md text-xs" >
-                      {row.action}
+                    <button className="p-1 bg-black text-white rounded-md text-xs">
+                      {row.action.name}
                     </button>
                   </td>
                 ) : (
                   ""
                 )}
-             
               </tr>
             ))}
           </tbody>

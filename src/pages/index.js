@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Table from "../components/table/Table";
 import { tableStructureData } from "../utils/TableStructureData";
 import ProductDrawer from "../components/ProductDrawer";
@@ -17,11 +17,11 @@ import {
 } from "../assets/images/index";
 import { useSelector } from "react-redux";
 import { useGetEmployeesProductsQuery } from "../apis/companyManager/index";
+import { globalFunctions } from "../global-functions/GlobalFunctions";
 
 const Index = () => {
   const { data, error, isLoading } = useGetEmployeesProductsQuery();
   console.log("data", data, "loading", isLoading);
-
   const [tableData, setTableData] = useState([
     {
       id: 1,
@@ -58,8 +58,10 @@ const Index = () => {
     { id: 10, src: p10 },
     { id: 11, src: p11 },
   ];
+
   const value = useSelector((val) => val);
   console.log("value", value);
+
   const Drawer = (
     <ProductDrawer show={showDrawer} setShow={setShowDrawer} img={products} />
   );
@@ -67,6 +69,13 @@ const Index = () => {
   const openDrawer = () => {
     setShowDrawer(!showDrawer);
   };
+
+  useEffect(() => {
+    if (data != undefined) {
+     let tableDataConvert= globalFunctions.tableDataFormatConverter(data);
+     setTableData(tableDataConvert)
+    }
+  }, [data]);
 
   return (
     <div style={{ padding: "7rem 6rem" }}>

@@ -17,11 +17,11 @@ import { baseURL } from "../../config";
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const ManagerApi = createApi({
-  reducerPath: 'rtkAdminApi',
+  reducerPath: 'rtkManagerApi',
   baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
   endpoints: (builder) => ({
     getEmployeesProducts: builder.query({
-      query: (name) => `/product/get-products/`,
+      query: () => "/product/get-products",
     }),
   }),
 })
