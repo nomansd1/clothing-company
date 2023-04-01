@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 } from '../../assets/images/index'
 import ProductDrawer from '../../components/ProductDrawer';
+import 'slick-carousel/slick/slick.css' 
+import 'slick-carousel/slick/slick-theme.css'
+import Slider from 'react-slick';
 
 function OrderTab() {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -58,19 +61,27 @@ function OrderTab() {
   const handleSearch = event => {
     setSearchTerm(event.target.value);
   };
+  let settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: false,
+  }
   return (
     <div>
       <h1 className='text-2xl font-semibold'>Order Details</h1>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
         <div className="flex items-center justify-between pb-4">
-          <div>
+          <div className='relative'>
             <button onClick={() => setFilterDrop(!filterDrop)} className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5" type="button">
               <svg className="w-4 h-4 mr-2 text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
               Sort Data
               <svg className="w-3 h-3 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
             {/* <!-- Dropdown menu --> */}
-            <div className={`z-10 ${filterDrop ? 'block' : 'hidden'} w-48 bg-white divide-y divide-gray-100 rounded-lg shadow`}>
+            <div className={`z-10 ${filterDrop ? 'block' : 'hidden'} absolute w-48 bg-white divide-y divide-gray-100 rounded-lg shadow`}>
               <ul className="p-3 space-y-1 text-sm text-gray-700">
                 <li>
                   <div onClick={handleSortAscending} className="cursor-pointer flex items-center p-2 rounded hover:bg-gray-100">
@@ -125,7 +136,7 @@ function OrderTab() {
           <tbody>
             {filteredData.map((row) => (
               <tr key={row.id} className="bg-white border-b hover:bg-gray-50">
-                <td scope="col" className="px-2 py-3">
+                <td className="px-2 py-3">
                   {row.id}
                 </td>
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
@@ -141,14 +152,48 @@ function OrderTab() {
                   {row.productSize}
                 </td>
                 <td className="px-6 py-4 relative">
-                  <div className='w-10 h-10 rounded-full cursor-pointer relative'>
+                  {/* <div className='w-10 h-10 rounded-full cursor-pointer relative'>
                     <img src={row.productImg} alt="" className='w-full h-full rounded-full' />
                     <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-75 flex justify-center items-center rounded-full transition-all duration-500 ease-in-out">
                       <span class="material-symbols-rounded text-3xl text-white">
                         fullscreen
                       </span>
                     </div>
+                  </div> */}
+                  <Slider {...settings} className=' w-full max-w-[200px]'>
+                  <div className='w-10 h-10 max-w-[2.5rem] mx-2 rounded-md cursor-pointer relative'>
+                    <img src={row.productImg} alt="" className='w-full h-full rounded-md' />
+                    <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-75 flex justify-center items-center rounded-md transition-all duration-500 ease-in-out">
+                      <span class="material-symbols-rounded text-3xl text-white">
+                        fullscreen
+                      </span>
+                    </div>
                   </div>
+                  <div className='w-10 h-10 max-w-[2.5rem] mx-2 rounded-md cursor-pointer relative'>
+                    <img src={row.productImg} alt="" className='w-full h-full rounded-md' />
+                    <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-75 flex justify-center items-center rounded-md transition-all duration-500 ease-in-out">
+                      <span class="material-symbols-rounded text-3xl text-white">
+                        fullscreen
+                      </span>
+                    </div>
+                  </div>
+                  <div className='w-10 h-10 max-w-[2.5rem] mx-2 rounded-md cursor-pointer relative'>
+                    <img src={row.productImg} alt="" className='w-full h-full rounded-md' />
+                    <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-75 flex justify-center items-center rounded-md transition-all duration-500 ease-in-out">
+                      <span class="material-symbols-rounded text-3xl text-white">
+                        fullscreen
+                      </span>
+                    </div>
+                  </div>
+                  <div className='w-10 h-10 max-w-[2.5rem] mx-2 rounded-md cursor-pointer relative'>
+                    <img src={row.productImg} alt="" className='w-full h-full rounded-md' />
+                    <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-75 flex justify-center items-center rounded-md transition-all duration-500 ease-in-out">
+                      <span class="material-symbols-rounded text-3xl text-white">
+                        fullscreen
+                      </span>
+                    </div>
+                  </div>
+                  </Slider>
                 </td>
                 <td className="px-6 py-4">
                   {row.budget}
