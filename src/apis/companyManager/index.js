@@ -13,14 +13,20 @@ export const ManagerApi = createApi({
       query: () => "/product/get-products",
     }),
     addNewOrder: builder.mutation({
-      query: (payload) => ({
-        url: '/order/add-order',
-        method: 'POST',
-        body: payload,
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-      }),
+      query: (payload) => {
+        console.log("payload >>",payload)
+
+        return  ({
+        
+            url: '/order/add-order',
+            method: 'POST',
+            body: payload,
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+          })
+        
+      },
       invalidatesTags: ['product'],
     
 

@@ -4,35 +4,63 @@ import { useAddNewOrderMutation } from "../../apis/companyManager/index";
 function CartTab() {
   const [addNewOrder, response] = useAddNewOrderMutation();
   const [cartProducts, setCartProducts] = useState([]);
-console.log("res",response)
+  console.log("res", response);
   const orderBodyConvert = (cartProducts) => {
-    cartProducts.map((val) => {
+    debugger;
+    // let total=cartProducts.map(val=>val.map(value=>value.productPrice))
+    // val.slider.showProducts[0].products
+    // console.log("total>>>",total)
+
+    return cartProducts.map((val) => {
+      let total = val.slider.showProducts[0].products.map(
+        (val) => val.productPrice
+      );
+      total = total.reduce((previousScore, currentScore, index) =>  previousScore + currentScore, 0);
+      console.log("total/>>", total);
+
       return {
         employeeId: val.id,
         products: val.slider.showProducts[0].products,
         companyName: "ajjs",
-        bill: 200,
-        quantity: 200,
+        bill: total,
+        quantity: 5,
+        companyId: "642971e096ff3d9f02f81b00",
+        comment: "Hi I have creted order, plz connect with me ",
       };
     });
   };
   const createOrder = () => {
-    console.log(">>>");
-    let orderData=orderBodyConvert(cartProducts)
-    addNewOrder(orderData)
-      .unwrap()
-      .then((res) => {
-        console.log("res", res);
-        alert("Order created");
-      })
-      .then((error) => {
-        console.log(error);
-      });
+    let orderData = orderBodyConvert(cartProducts);
+    console.log("orer?", orderData);
+    if (orderData.length > 0) {
+      alert("Order Created");
+      //  remove cart item on rder created
+      addNewOrder(orderData)
+        .unwrap()
+        .then((res) => {
+          console.log("res", res);
+          alert("Order created");
+        })
+        .then((error) => {
+          console.log(error);
+        });
+    } else {
+      alert("Add Item First ");
+    }
   };
-
+  const removeCartItem = (id) => {
+    debugger;
+    let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
+    if (getLocalStorageCartData != null) {
+      // getLocalStorageCartData = JSON.parse(getLocalStorageCartData);
+      let RemoveItem = getLocalStorageCartData.filter((val) => val.id !== id);
+      localStorage.setItem("addToCart", JSON.stringify(RemoveItem));
+      setCartProducts(RemoveItem);
+    }
+  };
   useEffect(() => {
     let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
-    getLocalStorageCartData = JSON.parse(getLocalStorageCartData);
+    // getLocalStorageCartData = JSON.parse(getLocalStorageCartData);
     console.log("get", getLocalStorageCartData);
     if (
       getLocalStorageCartData != undefined ||
@@ -77,6 +105,13 @@ console.log("res",response)
                   );
                 })}
               </div>
+              <button
+                onClick={() => {
+                  removeCartItem(item.id);
+                }}
+              >
+                Remove Item
+              </button>
             </div>
             {/* <div className="flex items-center mt-4 sm:mt-0">
               <div className="flex flex-col items-center mr-4">
