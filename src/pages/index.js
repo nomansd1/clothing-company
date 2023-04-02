@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "../components/table/Table";
 import { tableStructureData } from "../utils/TableStructureData";
 import ProductDrawer from "../components/ProductDrawer";
@@ -22,28 +22,8 @@ import { globalFunctions } from "../global-functions/GlobalFunctions";
 const Index = () => {
   const { data, error, isLoading } = useGetEmployeesProductsQuery();
   console.log("data", data, "loading", isLoading);
-  const [tableData, setTableData] = useState([
-    {
-      id: 1,
-      name: "Syed Noman Ali",
-      dressImg:
-        "https://spng.pngfind.com/pngs/s/124-1245916_a-black-t-shirt-black-shirt-hd-png.png",
-      budget: 100,
-      slider: "Show Products",
-      action: "Add Order",
-    },
-    {
-      id: 2,
-      name: "Syed Hasnain Askari",
-      dressSize: 18,
-      dressImg:
-        "https://spng.pngfind.com/pngs/s/124-1245916_a-black-t-shirt-black-shirt-hd-png.png",
-      budget: 400,
-      slider: "Show Products",
-
-      action: "Add Order",
-    },
-  ]);
+  const [tableData, setTableData] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState([]);
   const [showDrawer, setShowDrawer] = useState(false);
   const products = [
     { id: 1, src: p1 },
@@ -59,21 +39,52 @@ const Index = () => {
     { id: 11, src: p11 },
   ];
 
-  const value = useSelector((val) => val);
-  console.log("value", value);
+  // const value = useSelector((val) => val);
+  // console.log("value", value);
 
-  const Drawer = (
-    <ProductDrawer show={showDrawer} setShow={setShowDrawer} img={products} />
-  );
-
-  const openDrawer = () => {
+  const openDrawer = (row) => {
     setShowDrawer(!showDrawer);
+    console.log("row", row);
+    setSelectedEmployee(row);
+  };
+  const addMoreProduct = (products) => {
+    // debugger
+    console.log("peoducts", products);
+    let emp = selectedEmployee.slider.showProducts[0].products;
+    const obj = { ...selectedEmployee };
+    emp = [...emp, products];
+    obj.slider.showProducts = [{ products: emp }];
+    let updateCollection = tableData.filter(
+      (val) => val.id != selectedEmployee.id
+    );
+    updateCollection.push(obj);
+
+    setTableData([...updateCollection]);
   };
 
+  const addItem = (row) => {
+    alert("product added in cart");
+    let cartItems=[]
+debugger
+    let getLocalStorageCartData=JSON.parse(localStorage.getItem("addToCart"));
+    getLocalStorageCartData=JSON.parse(getLocalStorageCartData)
+    if(getLocalStorageCartData != undefined || getLocalStorageCartData != null){
+  let filterData=getLocalStorageCartData.filter(val=>val.id != row.id);
+  filterData.push(row);
+  localStorage.setItem("addToCart",JSON.stringify(JSON.stringify(filterData)));
+
+    }else{
+      cartItems.push(row)
+    localStorage.setItem("addToCart",JSON.stringify( JSON.stringify(cartItems)));
+
+    }
+  };
   useEffect(() => {
+    let getLocalStorageCartData=JSON.parse(localStorage.getItem("addToCart"));
+    console.log("get",getLocalStorageCartData)
     if (data != undefined) {
-     let tableDataConvert= globalFunctions.tableDataFormatConverter(data);
-     setTableData(tableDataConvert)
+      let tableDataConvert = globalFunctions.tableDataFormatConverter(data);
+      setTableData(tableDataConvert);
     }
   }, [data]);
 
@@ -83,10 +94,16 @@ const Index = () => {
         tableData={tableData}
         setTableData={setTableData}
         columns={tableStructureData.columns}
-        tableTitle="Order Table"
+        tableTitle="Create Order"
         openDrawer={openDrawer}
+        addItem={addItem}
       />
-      {Drawer}
+      <ProductDrawer
+        show={showDrawer}
+        setShow={setShowDrawer}
+        img={products}
+        addMoreProduct={addMoreProduct}
+      />
     </div>
   );
 };
