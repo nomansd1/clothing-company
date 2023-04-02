@@ -26,7 +26,7 @@ function CartTab() {
     <div>
       <h1 className='text-3xl font-semibold mb-2'>Cart</h1>
       {cartProducts.map((item, index) => (
-        <div key={index} className="flex flex-col sm:flex-row justify-between rounded-lg bg-gray-200 my-2 border-b border-gray-200 py-4 px-2">
+        <div key={index} className="flex flex-col sm:flex-row justify-between rounded-lgro bg-gray-200 my-2 border-b border-gray-200 py-4 px-2">
         <div className="flex flex-col md:flex-row lg:flex-row">
           <img className="h-16 w-16 object-contain rounded-md mr-4" src={item.productImg} alt="" />
           <div className="flex flex-col">
