@@ -60,7 +60,7 @@ function Tab() {
                     </ul>
                 </div>
             </aside>
-            <main className="ml-14 h-[91vh] overflow-auto p-10 mt-[56px] ">
+            <main className="ml-14 h-[91vh] p-10 mt-[56px] ">
                 {activeTab === 1 && <DashboardTab/>}
                 {activeTab === 2 && <OrderTab/>}
                 {activeTab === 3 && <CartTab/>}
