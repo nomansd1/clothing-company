@@ -63,7 +63,7 @@ function Table({ tableData, setTableData, columns, tableTitle, openDrawer ,addIt
       <h1 className="text-2xl font-semibold">{tableTitle ? tableTitle : ""}</h1>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
         <div className="flex items-center justify-between pb-4">
-          <div>
+          <div className="relative">
             <button
               onClick={() => setFilterDrop(!filterDrop)}
               className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5"
@@ -103,7 +103,7 @@ function Table({ tableData, setTableData, columns, tableTitle, openDrawer ,addIt
             <div
               className={`z-10 ${
                 filterDrop ? "block" : "hidden"
-              } w-48 bg-white divide-y divide-gray-100 rounded-lg shadow`}
+              } absolute w-48 bg-white divide-y divide-gray-100 rounded-lg shadow`}
             >
               <ul className="p-3 space-y-1 text-sm text-gray-700">
                 <li>
@@ -179,22 +179,20 @@ function Table({ tableData, setTableData, columns, tableTitle, openDrawer ,addIt
                 </th>
 
                 <td className="px-6 py-4 relative">
-                  <Slider {...sliderSettings} className=" w-full max-w-[200px]">
+                  <Slider {...sliderSettings} className="!mx-auto w-full min-w-[500px] max-w-[500px]">
                     {row.slider?.showProducts?.map((val, i) => {
                       return val?.products.map((val, i) => (
                         <div
                           key={val._id}
-                          className="w-10 h-10 max-w-[2.5rem] mx-2 rounded-md cursor-pointer relative"
+                          className="w-[7.5rem] h-[7.5rem] max-w-[7.5rem] rounded-md cursor-pointer relative"
                         >
                           <img
                             src={val.productImage}
                             alt=""
                             className="w-full h-full rounded-md"
                           />
-                          <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-75 flex justify-center items-center rounded-md transition-all duration-500 ease-in-out">
-                            <span class="material-symbols-rounded text-3xl text-white">
-                              {val.productName}
-                            </span>
+                          <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-100 flex justify-center items-center rounded-md transition-all duration-500 ease-in-out">
+                            <span className="text-xs text-white text-center font-semibold">{val.productName}</span>
                           </div>
                         </div>
                       ));
