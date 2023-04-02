@@ -4,7 +4,7 @@ import { type } from "@testing-library/user-event/dist/type";
 import Slider from "react-slick";
 import { tableStructureData } from "../../utils/TableStructureData";
 
-function Table({ tableData, setTableData, columns, tableTitle, openDrawer }) {
+function Table({ tableData, setTableData, columns, tableTitle, openDrawer ,addItem}) {
   const [filterDrop, setFilterDrop] = useState(false);
   const [sortOrder, setSortOrder] = useState("ascending");
   const [searchTerm, setSearchTerm] = useState("");
@@ -181,7 +181,7 @@ function Table({ tableData, setTableData, columns, tableTitle, openDrawer }) {
                 <td className="px-6 py-4 relative">
                   <Slider {...sliderSettings} className=" w-full max-w-[200px]">
                     {row.slider?.showProducts?.map((val, i) => {
-                      return val.products.map((val, i) => (
+                      return val?.products.map((val, i) => (
                         <div
                           key={val._id}
                           className="w-10 h-10 max-w-[2.5rem] mx-2 rounded-md cursor-pointer relative"
@@ -207,7 +207,7 @@ function Table({ tableData, setTableData, columns, tableTitle, openDrawer }) {
                   <td className="px-6 py-4">
                     <button
                       className="p-1 bg-black text-white rounded-md text-xs"
-                      onClick={() => openDrawer()}
+                      onClick={() => openDrawer(row)}
                     >
                       {row.slider.name}
                     </button>
@@ -217,7 +217,7 @@ function Table({ tableData, setTableData, columns, tableTitle, openDrawer }) {
                 )}
                 {typeAction ? (
                   <td className="px-6 py-4">
-                    <button className="p-1 bg-black text-white rounded-md text-xs">
+                    <button className="p-1 bg-black text-white rounded-md text-xs" onClick={()=>{addItem(row)}}>
                       {row.action.name}
                     </button>
                   </td>

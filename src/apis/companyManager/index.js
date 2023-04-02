@@ -1,30 +1,33 @@
 // import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseURL } from "../../config";
 
-// export const getProductEmployeeApi = createApi({
-//   reducerPath: "admin",
-//   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3977/api" }),
-//   endpoints: (builder) => ({
-//     getProductEmployeesQuery: builder.query({
-//       query: (name) => `product/get-products`,
-//     }),
-//   }),
-// });
 
-// export const { useGetProductEmployeesQuery } = getProductEmployeeApi;
-
-// Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const ManagerApi = createApi({
   reducerPath: 'rtkManagerApi',
   baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
+  tagTypes: ['product'],
   endpoints: (builder) => ({
     getEmployeesProducts: builder.query({
       query: () => "/product/get-products",
     }),
+    addNewOrder: builder.mutation({
+      query: (payload) => ({
+        url: '/order/add-order',
+        method: 'POST',
+        body: payload,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      }),
+      invalidatesTags: ['product'],
+    
+
+    
   }),
+})
 })
 
 
-export const { useGetEmployeesProductsQuery } = ManagerApi
+export const { useGetEmployeesProductsQuery, useAddNewOrderMutation } = ManagerApi
