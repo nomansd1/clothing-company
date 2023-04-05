@@ -2,9 +2,23 @@ import React, { useEffect, useState } from "react";
 import { tableFunctions } from "../../global-functions/GlobalFunctions";
 import { type } from "@testing-library/user-event/dist/type";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { tableStructureData } from "../../utils/TableStructureData";
 
-function Table({ tableData, setTableData, columns, tableTitle, openDrawer ,addItem}) {
+function Table({
+  tableData,
+  setTableData,
+  columns,
+  tableTitle,
+  openDrawer,
+  addItem,
+  hideButtons,
+  setInputBudget
+  ,inputBudget,
+  setInputSelectedResult,
+  inputSelectedResult
+}) {
   const [filterDrop, setFilterDrop] = useState(false);
   const [sortOrder, setSortOrder] = useState("ascending");
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,7 +68,11 @@ function Table({ tableData, setTableData, columns, tableTitle, openDrawer ,addIt
       if (element.type == "action") {
         setTypeAction(true);
       } else if (element.type == "slider") {
-        setTypeSlider(true);
+        if (hideButtons == undefined) {
+          setTypeSlider(true);
+        } else if (hideButtons == false) {
+          setTypeSlider(false);
+        }
       }
     });
   }, []);
@@ -171,36 +189,101 @@ function Table({ tableData, setTableData, columns, tableTitle, openDrawer ,addIt
                 <td scope="col" className="px-2 py-3">
                   {row.SNO}
                 </td>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  {row.name}
-                </th>
+                {row.name ? (
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    {row.name}
+                  </th>
+                ) : (
+                  ""
+                )}
+                {row.requestAmount ? (
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    {row.requestAmount}
+                  </th>
+                ) : (
+                  ""
+                )}
+                {row.email ? (
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    {row.email}
+                  </th>
+                ) : (
+                  ""
+                )}
+                {row.gender ? (
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    {row.gender}
+                  </th>
+                ) : (
+                  ""
+                )}
 
-                <td className="px-6 py-4 relative">
-                  <Slider {...sliderSettings} className="!mx-auto w-full min-w-[500px] max-w-[500px]">
-                    {row.slider?.showProducts?.map((val, i) => {
-                      return val?.products.map((val, i) => (
-                        <div
-                          key={val._id}
-                          className="w-[7.5rem] h-[7.5rem] max-w-[7.5rem] rounded-md cursor-pointer relative"
-                        >
-                          <img
-                            src={val.productImage}
-                            alt=""
-                            className="w-full h-full rounded-md"
-                          />
-                          <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-100 flex justify-center items-center rounded-md transition-all duration-500 ease-in-out">
-                            <span className="text-xs text-white text-center font-semibold">{val.productName}</span>
+                {row.slider ? (
+                  <td className="px-6 py-4 relative">
+                    <Slider
+                      {...sliderSettings}
+                      className="!mx-auto w-full   min-w-[500px] max-w-[500px]"
+                    >
+                      {row.slider?.showProducts?.map((val, i) => {
+                        return val?.products.map((val, i) => (
+                          <div
+                            key={val._id}
+                            className="w-[7.5rem] h-[7.5rem] max-w-[7.5rem] rounded-md cursor-pointer relative"
+                          >
+                            <img
+                              src={val.productImage}
+                              alt=""
+                              className="w-full h-full rounded-md"
+                            />
+                            <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-100 flex flex-col justify-center items-center rounded-md transition-all duration-500 ease-in-out">
+                              <span className="text-xs text-white text-center font-semibold">
+                                {val.productName}
+                              </span>
+                              <div>
+                                {" "}
+                                <span className="text-xs text-white text-center font-semibold">
+                                  Price : {val.productPrice}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      ));
-                    })}
-                  </Slider>
-                </td>
+                        ));
+                      })}
+                    </Slider>
+                  </td>
+                ) : (
+                  ""
+                )}
+                {row.bill ? <td className="px-6 py-4">{row.bill}</td> : ""}
 
-                <td className="px-6 py-4">{row.budget}</td>
+                {row.budget ? <td className="px-6 py-4">{row.budget}</td> : ""}
+                {row.allocateBudget ? <td className="px-6 py-4">{row.allocateBudget}</td> : ""}
+                {row.allocateBudget ? (
+                  <td className="px-6 py-4">
+                    <input
+                      type="text"
+                      className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500"
+                      value={inputBudget}
+                      onChange={(e)=>{setInputBudget(e.target.value)}}
+                      
+                      
+                    />
+                  </td>
+                ) : (
+                  ""
+                )}
                 {typeSlider ? (
                   <td className="px-6 py-4">
                     <button
@@ -213,9 +296,51 @@ function Table({ tableData, setTableData, columns, tableTitle, openDrawer ,addIt
                 ) : (
                   ""
                 )}
+                {row.status ? (
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    {row.status}
+                  </th>
+                ) : (
+                  ""
+                )}
+                {row.select ? (
+                  // <th
+                  //   scope="row"
+                  //   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  // >
+                  //   <label htmlFor={`${row.name}-1`}>Approved</label>
+                  //   <input
+                  //     type="radio"
+                  //     id={`${row.name}-1`}
+                  //     name={row.name}
+                  //   ></input>
+                  //   <label htmlFor={`${row.name}-2`}>Reject</label>
+                  //   <input
+                  //     type="radio"
+                  //     id={`${row.name}-2`}
+                  //     name={row.name}
+                  //   ></input>
+                  // </th>
+                  <td className="px-6 py-4">
+                  <label class="relative inline-flex items-center  cursor-pointer">
+                    <input type="checkbox" onChange={()=>{setInputSelectedResult(!inputSelectedResult)}} checked={inputSelectedResult} class="sr-only peer" />
+                      <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </td>
+                ) : (
+                  ""
+                )}
                 {typeAction ? (
                   <td className="px-6 py-4">
-                    <button className="p-1 bg-black text-white rounded-md text-xs" onClick={()=>{addItem(row)}}>
+                    <button
+                      className="p-1 bg-black text-white rounded-md text-xs"
+                      onClick={() => {
+                        addItem(row);
+                      }}
+                    >
                       {row.action.name}
                     </button>
                   </td>

@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: 0,
+  loginState:false,
+  loading:false,
+  user:{},
 };
 
 export const ManagerSlice = createSlice({
@@ -11,15 +13,10 @@ export const ManagerSlice = createSlice({
     increment: (state) => {
       state.value += 1;
     },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
-    },
+  
   },
 });
 
-export const { increment, decrement, incrementByAmount } = ManagerSlice.actions;
+export const { increment } = ManagerSlice.actions;
 
 export default ManagerSlice.reducer;
