@@ -64,24 +64,36 @@ const Index = () => {
 
   const addItem = (row) => {
     alert("product added in cart");
-    let cartItems=[]
-debugger
-    let getLocalStorageCartData=JSON.parse(localStorage.getItem("addToCart"));
-    getLocalStorageCartData=JSON.parse(getLocalStorageCartData)
-    if(getLocalStorageCartData != undefined || getLocalStorageCartData != null){
-  let filterData=getLocalStorageCartData.filter(val=>val.id != row.id);
-  filterData.push(row);
-  localStorage.setItem("addToCart",JSON.stringify(JSON.stringify(filterData)));
+    let cartItems = [];
+    debugger;
+    let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
 
-    }else{
-      cartItems.push(row)
-    localStorage.setItem("addToCart",JSON.stringify( JSON.stringify(cartItems)));
-
+    let totalBilled = row.slider.showProducts[0].products.map(val=>val.productPrice);
+  totalBilled=totalBilled.reduce(
+    (previousScore, currentScore, index)=>previousScore+currentScore, 
+    0);
+    console.log("totl", totalBilled);
+    if (totalBilled <= row.budget) {
+      if (
+        getLocalStorageCartData != undefined ||
+        getLocalStorageCartData != null
+      ) {
+        let filterData = getLocalStorageCartData.filter(
+          (val) => val.id != row.id
+        );
+        filterData.push(row);
+        localStorage.setItem("addToCart", JSON.stringify(filterData));
+      } else {
+        cartItems.push(row);
+        localStorage.setItem("addToCart", JSON.stringify(cartItems));
+      }
+    } else {
+      alert("Plz Increase The budget");
     }
   };
   useEffect(() => {
-    let getLocalStorageCartData=JSON.parse(localStorage.getItem("addToCart"));
-    console.log("get",getLocalStorageCartData)
+    let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
+    // console.log("get",getLocalStorageCartData)
     if (data != undefined) {
       let tableDataConvert = globalFunctions.tableDataFormatConverter(data);
       setTableData(tableDataConvert);

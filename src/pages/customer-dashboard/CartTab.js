@@ -3,36 +3,71 @@ import { p1 } from "../../assets/images/index";
 import { useAddNewOrderMutation } from "../../apis/companyManager/index";
 function CartTab() {
   const [addNewOrder, response] = useAddNewOrderMutation();
+  const [comment, setComment] = useState("");
   const [cartProducts, setCartProducts] = useState([]);
-  console.log("res", response)
+  console.log("res", response);
   const orderBodyConvert = (cartProducts) => {
-    cartProducts.map((val) => {
+    debugger;
+    const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
+    // let total=cartProducts.map(val=>val.map(value=>value.productPrice))
+    // val.slider.showProducts[0].products
+    // console.log("total>>>",total)
+
+    return cartProducts.map((val) => {
+      let total = val.slider.showProducts[0].products.map(
+        (val) => val.productPrice
+      );
+      total = total.reduce(
+        (previousScore, currentScore, index) => previousScore + currentScore,
+        0
+      );
+      console.log("total/>>", total);
+
       return {
         employeeId: val.id,
         products: val.slider.showProducts[0].products,
         companyName: "ajjs",
-        bill: 200,
-        quantity: 200,
+        bill: total,
+        quantity: 5,
+        companyId: companyId,
+        comment: comment,
       };
     });
   };
   const createOrder = () => {
-    console.log(">>>");
-    let orderData = orderBodyConvert(cartProducts)
-    addNewOrder(orderData)
-      .unwrap()
-      .then((res) => {
-        console.log("res", res);
-        alert("Order created");
-      })
-      .then((error) => {
-        console.log(error);
-      });
-  };
+    let orderData = orderBodyConvert(cartProducts);
+    console.log("orer?", orderData);
 
+    if (orderData.length > 0) {
+      //  remove cart item on rder created
+      addNewOrder(orderData)
+        .unwrap()
+        .then((res) => {
+          console.log("res", res);
+          alert("Order created");
+          setComment("");
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("error while creating order");
+        });
+    } else {
+      alert("Add Item First ");
+    }
+  };
+  const removeCartItem = (id) => {
+    debugger;
+    let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
+    if (getLocalStorageCartData != null) {
+      // getLocalStorageCartData = JSON.parse(getLocalStorageCartData);
+      let RemoveItem = getLocalStorageCartData.filter((val) => val.id !== id);
+      localStorage.setItem("addToCart", JSON.stringify(RemoveItem));
+      setCartProducts(RemoveItem);
+    }
+  };
   useEffect(() => {
     let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
-    getLocalStorageCartData = JSON.parse(getLocalStorageCartData);
+    // getLocalStorageCartData = JSON.parse(getLocalStorageCartData);
     console.log("get", getLocalStorageCartData);
     if (
       getLocalStorageCartData != undefined ||
@@ -54,7 +89,12 @@ function CartTab() {
             className="relative flex flex-col sm:flex-row justify-between rounded-lg bg-gray-200 my-2 border-b border-gray-200 py-4 px-2"
           >
             <div className="absolute cursor-pointer top-3 right-5">
-              <span class="material-symbols-rounded">
+              <span
+                class="material-symbols-rounded"
+                onClick={() => {
+                  removeCartItem(item.id);
+                }}
+              >
                 close
               </span>
             </div>
@@ -116,6 +156,9 @@ function CartTab() {
           className="w-full border border-gray-300 p-2 rounded-md h-[100px]"
           id="detailed-info"
           name="detailed-info"
+          onChange={(e) => {
+            setComment(e.target.value);
+          }}
         ></textarea>
         <button
           className="py-1.5 px-3 bg-black text-white mt-2 rounded-lg cursor-pointer"

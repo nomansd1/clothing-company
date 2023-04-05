@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Table from "../../components/table/Table";
-import { tableStructureData } from "../../utils/TableStructureData";
 import ProductDrawer from "../../components/ProductDrawer";
 import {
   p1,
@@ -18,15 +17,18 @@ import {
 import { useSelector } from "react-redux";
 import { useGetEmployeesProductsQuery } from "../../apis/companyManager/index";
 import { globalFunctions } from "../../global-functions/GlobalFunctions";
+import { tableStructureData } from "../../utils/TableStructureData";
 
 const Index = () => {
   const { data, error, isLoading } = useGetEmployeesProductsQuery();
+  // only to show editable input
+  const [inputBudgetRequest, setInputBudgetRequest] = useState(true);
+
   console.log("data", data, "loading", isLoading);
   const [tableData, setTableData] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState([]);
   const [showDrawer, setShowDrawer] = useState(false);
-  const [inputBudgetRequest, setInputBudgetRequest] = useState(true);
-
+  const [inputBudgetValue, setInputBudgetValue] = useState(0);
   const products = [
     { id: 1, src: p1 },
     { id: 2, src: p2 },
@@ -43,10 +45,6 @@ const Index = () => {
 
   // const value = useSelector((val) => val);
   // console.log("value", value);
-  const updatedInput = (selectedInput) => {
-    console.log("selected Input", selectedInput);
-    // alert("s")
-  };
 
   const openDrawer = (row) => {
     setShowDrawer(!showDrawer);
@@ -100,6 +98,11 @@ const Index = () => {
       alert("Plz Increase The budget");
     }
   };
+
+  const updatedInput = (selectedInput) => {
+    console.log("selected Input", selectedInput);
+  };
+
   useEffect(() => {
     let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
     // console.log("get",getLocalStorageCartData)
@@ -110,7 +113,9 @@ const Index = () => {
   }, [data]);
 
   return (
-     <>
+    <div className="px-auto py-9" style={{ width: "80%", margin: "auto auto" }}>
+      <h1 className=" py-3 mb-9 text-2xl font-semibold">Employee Panel</h1>
+
       <Table
         tableData={tableData}
         setTableData={setTableData}
@@ -118,17 +123,20 @@ const Index = () => {
         tableTitle="Create Order"
         openDrawer={openDrawer}
         addItem={addItem}
+        inputBudgetValue={inputBudgetValue}
+        setInputBudgetValue={setInputBudgetValue}
         inputBudgetRequest={inputBudgetRequest}
         setInputBudgetRequest={setInputBudgetRequest}
         updatedInput={updatedInput}
       />
+
       <ProductDrawer
         show={showDrawer}
         setShow={setShowDrawer}
         img={products}
         addMoreProduct={addMoreProduct}
       />
-    </>
+    </div>
   );
 };
 

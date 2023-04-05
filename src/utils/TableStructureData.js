@@ -7,6 +7,34 @@ const columns = [
   { label: "Add Items", type: "action" },
 ];
 
+const employeeColumns = [
+  { label: "S.N.O", type: "name" },
+  { label: "Employee name", type: "name" },
+  { label: "Email", type: "name" },
+  { label: "Gender", type: "name" },
+  { label: "Budget", type: "name" },
+];
+
+const orderColumns = [
+  { label: "S.N.O", type: "name" },
+  { label: "Employee name", type: "name" },
+  { label: "Products", type: "slider" },
+  { label: "Bill", type: "name" },
+  { label: "Budget", type: "name" },
+];
+
+const budgetRequestColumns = [
+  { label: "S.N.O", type: "name" },
+  { label: "Employee name", type: "name" },
+  { label: "Request Amount", type: "name" },
+  { label: "Current Budget", type: "name" },
+  { label: "Approved Amount", type: "name" },
+  {label:"Allocate Budget",type:"input"},
+  {label:"Request Status",type:"name"},
+  {label:"Result",type:"checkbox",result:"result"},
+  { label: "Action", type: "action" },
+];
+
 let sliderSettings = {
   dots: false,
   infinite: false,
@@ -18,6 +46,9 @@ let sliderSettings = {
 
 export const tableStructureData = {
   columns,
-  sliderSettings
+  sliderSettings,
+  employeeColumns,
+  orderColumns,
+  budgetRequestColumns
 };
 

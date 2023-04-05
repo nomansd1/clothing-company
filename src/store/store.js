@@ -10,12 +10,14 @@ import AdminSlice from "../redux-slice/AdminSliceReducer";
 import { createLogger } from "redux-logger";
 import  logger  from "redux-logger";
 import { ManagerApi} from "../apis";
+import AuthSlice  from "../redux-slice/UserSliceAuth";
 
 const loggerMiddleware = createLogger();
 const rootReducer = combineReducers({
   manager: ManagerSlice,
   employees: EmployeesSlice,
   admin: AdminSlice,
+  authUser:AuthSlice,
   [ManagerApi.reducerPath]: ManagerApi.reducer,
 });
 
