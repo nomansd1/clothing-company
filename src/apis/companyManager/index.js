@@ -8,7 +8,7 @@ const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
 export const ManagerApi = createApi({
   reducerPath: "rtkManagerApi",
   baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
-  tagTypes: ["product","budgetRequest"],
+  tagTypes: ["product", "budgetRequest"],
   endpoints: (builder) => ({
     getEmployeesProducts: builder.query({
       query: () => `/product/get-products/`,
@@ -24,8 +24,7 @@ export const ManagerApi = createApi({
     }),
     getBudgetRequest: builder.query({
       query: () => `/request/get-request`,
-      providesTags:["budgetRequest"]
-
+      providesTags: ["budgetRequest"],
     }),
     actionBudgetRequest: builder.mutation({
       query: (payload) => {
@@ -40,7 +39,22 @@ export const ManagerApi = createApi({
           },
         };
       },
-      invalidatesTags:["budgetRequest"]
+      invalidatesTags: ["budgetRequest"],
+    }),
+    actionEmployeeBudgetRequest: builder.mutation({
+      query: (payload) => {
+        console.log("payload >>", payload);
+
+        return {
+          url: "/request/approved-request",
+          method: "PUT",
+          body: payload,
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        };
+      },
+      invalidatesTags: ["budgetRequest"],
     }),
 
     addNewOrder: builder.mutation({
@@ -67,6 +81,7 @@ export const {
   useGetEmployeesQuery,
   useGetBudgetRequestQuery,
   useActionBudgetRequestMutation,
+  useActionEmployeeBudgetRequestMutation,
   useGetOrdersQuery,
   useAddNewOrderMutation,
 } = ManagerApi;

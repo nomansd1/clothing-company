@@ -14,7 +14,12 @@ const BudgetRequestTab = () => {
 
   const [tableData, setTableData] = useState([]);
   const [inputBudget, setInputBudget] = useState(0);
+  
   const [inputSelectedResult, setInputSelectedResult] = useState("pending");
+  const updatedInput = (selectedInput) => {
+    console.log("selected Input", selectedInput);
+    setInputBudget(selectedInput.value)
+  };
 
   const addItem = (row) => {
     console.log("row", row);
@@ -22,6 +27,8 @@ const BudgetRequestTab = () => {
       employeeId: row.employeeId,
       approvedAmount: inputBudget,
     };
+
+   
     actionBudgetRequest(budgetRequestActionData)
       .unwrap()
       .then((res) => {
@@ -62,6 +69,7 @@ const BudgetRequestTab = () => {
         setInputBudget={setInputBudget}
         inputSelectedResult={inputSelectedResult}
         setInputSelectedResult={setInputSelectedResult}
+        updatedInput={updatedInput}
         addItem={addItem}
       />
     </div>

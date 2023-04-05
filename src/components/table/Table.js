@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { tableStructureData } from "../../utils/TableStructureData";
+import EditableInput from "../editable-input/EditableInput";
 
 function Table({
   tableData,
@@ -17,7 +18,10 @@ function Table({
   setInputBudget
   ,inputBudget,
   setInputSelectedResult,
-  inputSelectedResult
+  inputSelectedResult,
+  inputBudgetRequest,
+  setInputBudgetRequest,
+  updatedInput
 }) {
   const [filterDrop, setFilterDrop] = useState(false);
   const [sortOrder, setSortOrder] = useState("ascending");
@@ -268,18 +272,17 @@ function Table({
                 )}
                 {row.bill ? <td className="px-6 py-4">{row.bill}</td> : ""}
 
-                {row.budget ? <td className="px-6 py-4">{row.budget}</td> : ""}
+                {inputBudgetRequest != undefined? <td className="px-6 py-4">
+              
+                    <EditableInput  value={row.budget} id={row.id} updatedInput={updatedInput}   />
+                    </td >:
+                 <td className="px-6 py-4">{row.budget}</td> }
+                
+                
                 {row.allocateBudget ? <td className="px-6 py-4">{row.allocateBudget}</td> : ""}
                 {row.allocateBudget ? (
                   <td className="px-6 py-4">
-                    <input
-                      type="text"
-                      className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500"
-                      value={inputBudget}
-                      onChange={(e)=>{setInputBudget(e.target.value)}}
-                      
-                      
-                    />
+                   <EditableInput  id={row.id} value={row.allocateBudget} updatedInput={updatedInput}   />
                   </td>
                 ) : (
                   ""
