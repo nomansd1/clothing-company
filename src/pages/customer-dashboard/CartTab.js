@@ -26,6 +26,7 @@ function CartTab() {
       return {
         employeeId: val.id,
         products: val.slider.showProducts[0].products,
+        id:val.slider.showProducts[0]._id,
         companyName: "ajjs",
         bill: total,
         quantity: 5,
@@ -45,7 +46,9 @@ function CartTab() {
         .then((res) => {
           console.log("res", res);
           alert("Order created");
-          setComment("");
+          setComment(" ");
+          localStorage.removeItem("addToCart");
+          setCartProducts([]);
         })
         .catch((error) => {
           console.log(error);
@@ -156,6 +159,7 @@ function CartTab() {
           className="w-full border border-gray-300 p-2 rounded-md h-[100px]"
           id="detailed-info"
           name="detailed-info"
+          value={comment}
           onChange={(e) => {
             setComment(e.target.value);
           }}

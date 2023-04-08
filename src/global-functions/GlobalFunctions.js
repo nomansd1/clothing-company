@@ -13,7 +13,8 @@ export const tableDataFormatConverter = (data) => {
 };
 
 export const employeeTableDataFormatConverter = (data) => {
-  let tableData = data[0].result.map((val, i) => {
+  debugger
+  let tableData = data[0]?.result.map((val, i) => {
     return {
       SNO: i + 1,
       id: val._id,
@@ -33,7 +34,7 @@ export const orderTableDataFormatConverter = (data) => {
     return {
       SNO: i + 1,
       id: val._id,
-      name: "Dummy",
+      name: data[0].employees.filter(vals=>vals._id==val.employeeId)[0].employeeName,
       slider: {
         showProducts: [{ products: val.products }],
         name: "Show Products",
@@ -71,7 +72,7 @@ export const budgetRequestTableDataFormatConverter = (datas) => {
       name: data.result[0].employeeName,
       requestAmount: data.requestAmount,
       budget: data.result[0].budget,
-      allocateBudget: 10,
+      allocateBudget: {value:`0`,showBtn:false},
       status: statusF(data.status),
       select: {result:statusResult(data.status)},
       action: { name: "Save" },
@@ -80,9 +81,28 @@ export const budgetRequestTableDataFormatConverter = (datas) => {
   return tableData;
 };
 
+
+
+export const employeeOrderBudgetFormatConverter = (data) => {
+  let tableData = data.map((val, i) => {
+    return {
+      SNO: i + 1,
+      id: val._id,
+      name: val.employeeName,
+      budget: val.budget,
+      allocateBudget: {value:`${0}`,showBtn:true},
+      slider: { showProducts: val.result, name: "Show Products" },
+      action: { name: "Add Order", showProducts: [] },
+    };
+  });
+  return tableData;
+};
+
+
 export const globalFunctions = {
   tableDataFormatConverter,
   employeeTableDataFormatConverter,
   orderTableDataFormatConverter,
   budgetRequestTableDataFormatConverter,
+  employeeOrderBudgetFormatConverter
 };

@@ -10,7 +10,7 @@ function EmployeesTab() {
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
       // console.log("get",getLocalStorageCartData)
-      if (data != undefined) {
+      if (data != undefined && data.length !=0) {
         let tableDataConvert = globalFunctions.employeeTableDataFormatConverter(data);
         console.log(">>>>>>>>",tableDataConvert)
         setTableData(tableDataConvert);

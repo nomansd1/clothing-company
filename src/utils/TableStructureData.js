@@ -1,15 +1,24 @@
 const columns = [
   { label: "S.N.O", type: "name" },
-  { label: "Employee name", type: "name" },
+  { label: "Employee", type: "name" },
   { label: "Products", type: "slider" },
   { label: "Budget", type: "name" },
   { label: "More Products", type: "action" },
   { label: "Add Items", type: "action" },
 ];
 
+const employeeOrderBudgetColumns = [
+  { label: "S.N.O", type: "name" },
+  { label: "Employee", type: "name" },
+  { label: "Products", type: "slider" },
+  { label: "Budget", type: "name" },
+  { label: "Allocate Budget",type:"input"},
+  { label: "Products", type: "action" },
+  { label: "Add Items", type: "action" },
+];
 const employeeColumns = [
   { label: "S.N.O", type: "name" },
-  { label: "Employee name", type: "name" },
+  { label: "Employee", type: "name" },
   { label: "Email", type: "name" },
   { label: "Gender", type: "name" },
   { label: "Budget", type: "name" },
@@ -17,7 +26,7 @@ const employeeColumns = [
 
 const orderColumns = [
   { label: "S.N.O", type: "name" },
-  { label: "Employee name", type: "name" },
+  { label: "Employee", type: "name" },
   { label: "Products", type: "slider" },
   { label: "Bill", type: "name" },
   { label: "Budget", type: "name" },
@@ -25,13 +34,14 @@ const orderColumns = [
 
 const budgetRequestColumns = [
   { label: "S.N.O", type: "name" },
-  { label: "Employee name", type: "name" },
+  { label: "Employee", type: "name" },
   { label: "Request Amount", type: "name" },
   { label: "Current Budget", type: "name" },
-  { label: "Approved Amount", type: "name" },
+  // { label: "Approved Amount", type: "name" },
   {label:"Allocate Budget",type:"input"},
   {label:"Request Status",type:"name"},
-  {label:"Result",type:"checkbox",result:"result"},
+  { label: "select",type:"input"},
+  // {label:"Result",type:"checkbox",result:"result"},
   { label: "Action", type: "action" },
 ];
 
@@ -49,6 +59,7 @@ export const tableStructureData = {
   sliderSettings,
   employeeColumns,
   orderColumns,
-  budgetRequestColumns
+  budgetRequestColumns,
+  employeeOrderBudgetColumns
 };
 

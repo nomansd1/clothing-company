@@ -14,26 +14,29 @@ const BudgetRequestTab = () => {
 
   const [tableData, setTableData] = useState([]);
   const [inputBudget, setInputBudget] = useState(0);
-  
+
   const [inputSelectedResult, setInputSelectedResult] = useState("pending");
+  const [budgetDecisionState, setBudgetDescisionState] = useState(0);
   const updatedInput = (selectedInput) => {
     console.log("selected Input", selectedInput);
-    setInputBudget(selectedInput.value)
+    setInputBudget(selectedInput.value);
   };
 
   const addItem = (row) => {
+    debugger;
     console.log("row", row);
     let budgetRequestActionData = {
+      requestId: row.id,
       employeeId: row.employeeId,
       approvedAmount: inputBudget,
+      status: budgetDecisionState,
     };
 
-   
     actionBudgetRequest(budgetRequestActionData)
       .unwrap()
       .then((res) => {
         console.log("res", res);
-        alert("budget action  created");
+        alert("budget requeste fired");
         // setComment("");
       })
       .catch((error) => {
@@ -43,10 +46,31 @@ const BudgetRequestTab = () => {
     // let obj= {...row}
   };
 
+  const budgetDecisionF = (value, row) => {
+    debugger;
+    console.log("row>>>>", row);
+    let status;
+    if (value == 1) {
+      status = "approved";
+    } else {
+      status = "rejected";
+    }
+    row.status = status;
+    let data = [...tableData];
+    let filterData = data.filter((val) => val.id != row.id);
+    let tableDataConvert =[];
+  //  if(filterData.length>0){
+  //    tableDataConvert =
+  //   globalFunctions.budgetRequestTableDataFormatConverter(filterData);
+  //  }
+    setTableData([row, ...filterData].sort((a,b)=>a.SNO-b.SNO));
+    setBudgetDescisionState(value);
+  };
+
   useEffect(() => {
     // console.log("get",getLocalStorageCartData)
 
-    if (data != undefined) {
+    if (data != undefined && data.length != 0) {
       let tableDataConvert =
         globalFunctions.budgetRequestTableDataFormatConverter(data);
       console.log(">>>>>>>>", tableDataConvert);
@@ -55,22 +79,25 @@ const BudgetRequestTab = () => {
         // setInputBudget(val.allocateBudget);
         setInputSelectedResult(val.select.result);
       });
+    } else {
+      setTableData([]);
     }
   }, [data]);
-  console.log(">>>>>>>>>>>~~~~~~~");
   return (
     <div>
       <Table
         tableData={tableData}
         setTableData={setTableData}
         columns={tableStructureData.budgetRequestColumns}
-        tableTitle="Employee Details"
+        tableTitle="Budget Requests"
         inputBudget={inputBudget}
         setInputBudget={setInputBudget}
         inputSelectedResult={inputSelectedResult}
         setInputSelectedResult={setInputSelectedResult}
         updatedInput={updatedInput}
         addItem={addItem}
+        budgetDecisionF={budgetDecisionF}
+        // updateBudgetF={budgetDecisionF}
       />
     </div>
   );

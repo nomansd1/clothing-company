@@ -8,7 +8,7 @@ import Index from "./pages/index";
 import TestModal from "./pages/TestModal";
 // import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Employee from "./pages/Employee-dashboard/Employee";
+import Employee from "./pages/Employee-dashboard/Employee-1";
 
 function App() {
   const user = useSelector((state) => state.authUser);

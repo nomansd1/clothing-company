@@ -3,12 +3,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { SignIn } from "./middleware/authMiddleware";
 // import { getFromLocalStorage } from "../../utils";
 
-let user =JSON.parse(localStorage.getItem("user"))
+let user =JSON.parse(localStorage.getItem("user"));
+user.result={...user.result,role:localStorage.getItem("role")}
+console.log("user",user)
 const initialState = {
   authErr: "",
   loading: false,
   user: user != (undefined || null) ? user : {},
-  userLoggedIn: false,
+  userLoggedIn: user?true:false,
 };
 
 export const auth = createSlice({
