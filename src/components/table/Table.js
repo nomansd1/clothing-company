@@ -5,7 +5,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { tableStructureData } from "../../utils/TableStructureData";
-import EditableInput from "../editable-input/EditableInput";
+import EditableInput from "../editable-input/EditableInput-1";
+import DoubleCheckbox from "../checkbox/DoubleCheckbox";
 
 function Table({
   tableData,
@@ -21,8 +22,11 @@ function Table({
   inputSelectedResult,
   inputBudgetRequest,
   setInputBudgetRequest,
-  updatedInput
+  updatedInput,
+  updateBudgetF,
+  budgetDecisionF
 }) {
+  
   const [filterDrop, setFilterDrop] = useState(false);
   const [sortOrder, setSortOrder] = useState("ascending");
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,6 +36,7 @@ function Table({
   // sorting functionality
   const sortData = (data, sortOrder) => {
     const sortedData = [...tableData];
+    console.log("table<<",sortedData)
     sortedData.sort((a, b) => {
       if (sortOrder === "ascending") {
         return a.budget - b.budget;
@@ -188,7 +193,7 @@ function Table({
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((row) => (
+            {filteredData.map((row,i) => (
               <tr key={row.id} className="bg-white border-b hover:bg-gray-50">
                 <td scope="col" className="px-2 py-3">
                   {row.SNO}
@@ -236,11 +241,12 @@ function Table({
 
                 {row.slider ? (
                   <td className="px-6 py-4 relative">
+                    {row?.slider?.showProducts[0].products.length==0 &&<h1>Products Are Ordered</h1>}
                     <Slider
                       {...sliderSettings}
                       className="!mx-auto w-full   min-w-[500px] max-w-[500px]"
                     >
-                      {row.slider?.showProducts?.map((val, i) => {
+                     {row.slider?.showProducts?.map((val, i) => {
                         return val?.products.map((val, i) => (
                           <div
                             key={val._id}
@@ -274,15 +280,15 @@ function Table({
 
                 {inputBudgetRequest != undefined? <td className="px-6 py-4">
               
-                    <EditableInput  value={row.budget} id={row.id} updatedInput={updatedInput}   />
+                    <EditableInput inputBudgetRequest={inputBudgetRequest} updateBudgetF={updateBudgetF}  value={row.budget} id={row.id} updatedInput={updatedInput}   />
                     </td >:
                  <td className="px-6 py-4">{row.budget}</td> }
                 
                 
-                {row.allocateBudget ? <td className="px-6 py-4">{row.allocateBudget}</td> : ""}
+                {/* {row.allocateBudget ? <td className="px-6 py-4">{row.allocateBudget}</td> : ""} */}
                 {row.allocateBudget ? (
                   <td className="px-6 py-4">
-                   <EditableInput  id={row.id} value={row.allocateBudget} updatedInput={updatedInput}   />
+                   <EditableInput showBtn={row.allocateBudget.showBtn} updateBudgetF={updateBudgetF}  id={row.id} value={row.allocateBudget.value} updatedInput={updatedInput}   />
                   </td>
                 ) : (
                   ""
@@ -309,33 +315,24 @@ function Table({
                 ) : (
                   ""
                 )}
+                    {row.selectBudgetAprroval ? (
+                
+                <DoubleCheckbox budgetDecisionF={budgetDecisionF} i={i} row={row}  />
+               ) : (
+                 ""
+               )}
                 {row.select ? (
-                  // <th
-                  //   scope="row"
-                  //   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  // >
-                  //   <label htmlFor={`${row.name}-1`}>Approved</label>
-                  //   <input
-                  //     type="radio"
-                  //     id={`${row.name}-1`}
-                  //     name={row.name}
-                  //   ></input>
-                  //   <label htmlFor={`${row.name}-2`}>Reject</label>
-                  //   <input
-                  //     type="radio"
-                  //     id={`${row.name}-2`}
-                  //     name={row.name}
-                  //   ></input>
-                  // </th>
-                  <td className="px-6 py-4">
-                  <label class="relative inline-flex items-center  cursor-pointer">
-                    <input type="checkbox" onChange={()=>{setInputSelectedResult(!inputSelectedResult)}} checked={inputSelectedResult} class="sr-only peer" />
-                      <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
-                </td>
+                         <DoubleCheckbox  budgetDecisionF={budgetDecisionF} i={i} row={row}   />
+                //   <td className="px-6 py-4">
+                //   <label class="relative inline-flex items-center  cursor-pointer">
+                //     <input type="checkbox" onChange={()=>{setInputSelectedResult(!inputSelectedResult)}} checked={inputSelectedResult} class="sr-only peer" />
+                //       <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                //   </label>
+                // </td>
                 ) : (
                   ""
                 )}
+             
                 {typeAction ? (
                   <td className="px-6 py-4">
                     <button

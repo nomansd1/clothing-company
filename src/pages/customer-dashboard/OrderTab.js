@@ -16,16 +16,18 @@ import {
   p11,
 } from "../../assets/images/index";
 import { useSelector } from "react-redux";
-import { useGetEmployeesProductsQuery } from "../../apis/companyManager/index";
+import { useGetEmployeesProductsQuery, useUpdateBudgetMutation } from "../../apis/companyManager/index";
 import { globalFunctions } from "../../global-functions/GlobalFunctions";
 
 const Index = () => {
   const { data, error, isLoading } = useGetEmployeesProductsQuery();
+  const [budgetUpdate, response] = useUpdateBudgetMutation();
   console.log("data", data, "loading", isLoading);
+  
   const [tableData, setTableData] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState([]);
   const [showDrawer, setShowDrawer] = useState(false);
-  const [inputBudgetRequest, setInputBudgetRequest] = useState(true);
+  const [inputBudgetRequest, setInputBudgetRequest] = useState(false);
 
   const products = [
     { id: 1, src: p1 },
@@ -41,11 +43,11 @@ const Index = () => {
     { id: 11, src: p11 },
   ];
 
-  // const value = useSelector((val) => val);
-  // console.log("value", value);
+
   const updatedInput = (selectedInput) => {
     console.log("selected Input", selectedInput);
-    // alert("s")
+    setInputBudgetRequest(selectedInput)
+  
   };
 
   const openDrawer = (row) => {
@@ -69,6 +71,7 @@ const Index = () => {
   };
 
   const addItem = (row) => {
+    debugger;
     alert("product added in cart");
     let cartItems = [];
     debugger;
@@ -100,11 +103,38 @@ const Index = () => {
       alert("Plz Increase The budget");
     }
   };
+
+  const budgetDecisionF=()=>{
+  if(inputBudgetRequest || inputBudgetRequest.value <0){
+    const updatedBudget={
+      employeeId:inputBudgetRequest.inputId,
+      changeBudgetAmount:inputBudgetRequest.value
+    }
+    budgetUpdate(updatedBudget)
+      .unwrap()
+      .then((res) => {
+        console.log("res", res);
+        alert("budget increased ");
+        // setComment("");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("error while updating budget");
+      });
+  }else{
+    alert("There is issue with budget Input ")
+  }
+  }
+
+  
+
   useEffect(() => {
     let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
     // console.log("get",getLocalStorageCartData)
-    if (data != undefined) {
+    if (data != undefined && data.length !=0) {
+      
       let tableDataConvert = globalFunctions.tableDataFormatConverter(data);
+      console.log(">>table",tableDataConvert)
       setTableData(tableDataConvert);
     }
   }, [data]);
@@ -121,6 +151,8 @@ const Index = () => {
         inputBudgetRequest={inputBudgetRequest}
         setInputBudgetRequest={setInputBudgetRequest}
         updatedInput={updatedInput}
+        updateBudgetF={budgetDecisionF}
+   
       />
       <ProductDrawer
         show={showDrawer}
