@@ -3,8 +3,14 @@ import { baseURL, API } from "../../config";
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
-const employeeId = "64351a67755b703a82f45f0b"
+const role=localStorage.getItem("role");
+let companyId;
+if(role=="manager"){
+  companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
+}else{
+   companyId = JSON.parse(localStorage.getItem("user"))?.result?.companyId;
+}
+const employeeId = JSON.parse(localStorage.getItem("user"))?.result?._id
 
 
 // const companyId="642b1cf70cbb7acac958d471"
@@ -17,8 +23,8 @@ export const ManagerApi = createApi({
       query: () => `/product/get-products/`,
       providesTags: ["employeeProducts"],
     }),
-    getCompanyProducts: builder.query({
-      query: () => `/product/get-products/bycompanyId?companyId=${companyId}`,
+    getCompanyAllProducts: builder.query({
+      query: () => `/product/get-productsbycompanyId?companyId=${companyId}`,
     }),
     getEmployees: builder.query({
       query: () => `/employee/get-employeebycompanyId?companyId=${companyId}`,
@@ -33,6 +39,11 @@ export const ManagerApi = createApi({
       providesTags: ["orders"],
 
     }),
+    getCompanyProducts: builder.query({
+      query: () => `product/get-getemployeeproductbycompanyId?companyId=${companyId}`,
+
+    }),
+
 
     getBudgetRequest: builder.query({
       query: () => `/request/get-request`,
@@ -64,7 +75,6 @@ export const ManagerApi = createApi({
     }),
     employeeRequestBudgetIncrement: builder.mutation({
       query: (payload) => {
-        console.log("payload >>", payload);
 
         return {
           url: "/request/add-request",
@@ -79,8 +89,6 @@ export const ManagerApi = createApi({
     }),
     actionBudgetRequest: builder.mutation({
       query: (payload) => {
-        console.log("payload >>", payload);
-
         return {
           url: "/request/approved-request",
           method: "PUT",
@@ -94,8 +102,6 @@ export const ManagerApi = createApi({
     }),
     actionEmployeeBudgetRequest: builder.mutation({
       query: (payload) => {
-        console.log("payload >>", payload);
-
         return {
           url: "/request/approved-request",
           method: "PUT",
@@ -109,8 +115,6 @@ export const ManagerApi = createApi({
     }),
     updateBudget: builder.mutation({
       query: (payload) => {
-        console.log("payload >>", payload);
-
         return {
           url: "/request/change-budget",
           method: "PUT",
@@ -156,7 +160,8 @@ export const {
   useGetTotalEmployeesLengthQuery,
   useGetTotalOrdersLengthQuery,
   useGetCompanyDetailsQuery,
-  useEmployeeGetProductQuery
+  useEmployeeGetProductQuery,
+  useGetCompanyAllProductsQuery,
 } = ManagerApi;
 
 export const managerLogin = (data) =>

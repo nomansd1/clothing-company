@@ -23,10 +23,10 @@ import {
 import { globalFunctions } from "../../global-functions/GlobalFunctions";
 import { tableStructureData } from "../../utils/TableStructureData";
 import { showPopup, errorPopup } from "../../redux-slice/UserSliceAuth";
+import { Header } from "../../components";
 
 const Index = () => {
   const { data, error, isLoading } = useEmployeeGetProductQuery();
-  console.log("data", data);
   const [addNewOrder, responseOrder] = useAddNewOrderMutation();
   const [budgetRequest, response] = useEmployeeRequestBudgetIncrementMutation();
 
@@ -169,7 +169,6 @@ const Index = () => {
 
   useEffect(() => {
     let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
-    debugger;
     if (data != undefined && data.length != 0) {
       let tableDataConvert =
         globalFunctions.employeeOrderBudgetFormatConverter(data);
@@ -179,10 +178,10 @@ const Index = () => {
   }, [data]);
 
   return (
-    <div className="px-auto py-9" style={{ width: "80%", margin: "auto auto" }}>
-      <h1 className=" py-3 mb-9 text-2xl font-semibold">Employee Panel</h1>
-
-      <Table
+    <div className="px-auto  mx-auto w-11/12" >
+      <Header />
+     <div className="mt-12 py-12">
+     <Table
         tableData={tableData}
         setTableData={setTableData}
         columns={tableStructureData.employeeOrderBudgetColumns}
@@ -195,6 +194,7 @@ const Index = () => {
         updatedInput={updatedInput}
         updateBudgetF={updateBudgetF}
       />
+     </div>
 
       <ProductDrawer
         show={showDrawer}

@@ -9,11 +9,11 @@ function CompanyProfileTab() {
   const { data, error, isLoading } =useGetCompanyDetailsQuery();
 console.log("data",data);
 const auth=useSelector(state=>state.authUser);
-const managerName=auth?.user?.result.name;
-const managerPassword=auth?.user?.result.managerPassword
+const managerName=auth?.user?.result?.name;
+const managerPassword=auth?.user?.result?.managerPassword
   return (
     <div>
-     {isLoading?<h1>...loading</h1>: <div class="bg-white text-black shadow-md p-6">
+     {isLoading || data == undefined?<h1>...loading</h1>: <div class="bg-white text-black shadow-md p-6">
   <div class="flex items-center mb-6">
     <img src={logo} alt="Company Logo" class="w-36 mr-2" />
   </div>

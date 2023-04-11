@@ -36,7 +36,6 @@ function Table({
   // sorting functionality
   const sortData = (data, sortOrder) => {
     const sortedData = [...tableData];
-    console.log("table<<", sortedData);
     sortedData.sort((a, b) => {
       if (sortOrder === "ascending") {
         return a.budget - b.budget;
@@ -242,10 +241,14 @@ function Table({
                 {row.slider ? (
                   <td className="px-6 py-4 relative">
                     {role === "employee"
-                      ? row.slider.showProducts.length == 0
-                      : row.slider.showProducts[0].products.length == 0 && (
-                          <h1>Products Are Ordered</h1>
-                        )}
+                      ? row.slider.showProducts.length == 0  && (
+                        <h1>Add Products To Buy</h1>
+                      ):""}
+                      {
+                     role=="manager"?  row.slider.showProducts[0].products.length == 0 && (
+                          <h1>Add Products To Buy</h1>
+                        ):""
+                     }
                     <Slider
                       {...sliderSettings}
                       className="!mx-auto w-full   min-w-[500px] max-w-[500px]"
@@ -275,7 +278,7 @@ function Table({
                                 <div>
                                   {" "}
                                   <span className="text-xs text-white text-center font-semibold">
-                                    Quantity : {val.productQuantity}
+                                    Quantity : {val.productQuantity != undefined?val.productQuantity:1}
                                   </span>
                                 </div>
                               </div>

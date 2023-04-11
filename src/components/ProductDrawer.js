@@ -1,25 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Check } from "../assets/images";
 import { showPopup,errorPopup } from "../redux-slice/UserSliceAuth";
 import { useDispatch } from "react-redux";
+import { useGetCompanyAllProductsQuery } from "../apis";
 
 function ProductDrawer(props) {
+  const {data,error,isLoading}=useGetCompanyAllProductsQuery();
+  console.log("data drawer ",data)
   const { addMoreProduct } = props;
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(new Array(props.img.length).fill(0));
+  const [productData,setProductData]=useState({})
+  const [allProduct,setAllProducts]=useState([])
+ 
   const dispatch=useDispatch()
 
-  const productData = {
-    quantity: quantity[selectedImage],
-    productImage:"https://cdn.mukama.com/31812/formal-friday-ultrafine-merino-t-shirt-black.jpg",
-    productName: "T-Shirt-JN1808",
-    productPrice: 100,
-    productSize: "M",
-    
-  };
   const selectImage = (index) => {
     // debugger
-    console.log("index", index, "selcted", selectedImage);
     if (selectedImage === index) {
       setSelectedImage(null);
     } else {
@@ -27,8 +25,9 @@ function ProductDrawer(props) {
     }
   };
 
-  const selectedProduct = () => {
-    addMoreProduct(productData);
+  const selectedProduct = (item) => {
+
+    addMoreProduct(item);
     dispatch(showPopup({state:true,message:"Product Added"}))
   };
 
@@ -47,6 +46,11 @@ function ProductDrawer(props) {
     setQuantity(newQuantity);
   };
   // onClick={() => props.setShow(!props.show)}
+  useEffect(()=>{
+    if(data != undefined){
+setAllProducts(data.products)
+    }
+  },[isLoading])
   return (
     <div
       className={`${
@@ -64,7 +68,7 @@ function ProductDrawer(props) {
           </span>
         </div>
         <div className=" relative h-[90%] grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:flex flex-wrap overflow-y-auto justify-center mx-auto ">
-          {props.img.map((item, index) => (
+          {allProduct.map((item, index) => (
             <div
               key={index}
               className="relative bg-red-500 max-h-[15rem] max-w-xs rounded-lg m-2 flex justify-center items-center"
@@ -75,7 +79,7 @@ function ProductDrawer(props) {
                 </div>
               )}
               <img
-                src={item.src}
+                src={item.productImage}
                 className={`h-full w-full cursor-pointer select-none ${
                   selectedImage === index
                     ? "border-2 border-blue-500 ring-1 ring-blue-500"
@@ -86,7 +90,7 @@ function ProductDrawer(props) {
               />
               {selectedImage === index && (
                 <div className="absolute w-[90%] bottom-2 bg-black text-white flex items-center rounded-lg">
-                  <button
+                  {/* <button
                     className="px-3 py-1 rounded-l-lg"
                     onClick={() => decreaseQuantity(index)}
                   >
@@ -98,10 +102,10 @@ function ProductDrawer(props) {
                     onClick={() => increaseQuantity(index)}
                   >
                     +
-                  </button>
+                  </button> */}
                   <button
                     className="px-3 py-1.5 mx-auto rounded-l-lg"
-                    onClick={selectedProduct}
+                    onClick={()=>{selectedProduct(item)}}
                   >
                     Add Product In List
                   </button>

@@ -1,11 +1,11 @@
 import React from 'react'
 import { Header, Tab } from '../../components/index';
 
-function Layout() {
+function Layout({children}) {
   return (
     <div>
       <Header/>
-      <Tab/>
+      <Tab element={children} />
     </div>
   )
 }

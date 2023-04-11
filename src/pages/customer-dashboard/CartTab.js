@@ -8,15 +8,11 @@ function CartTab() {
   const [addNewOrder, response] = useAddNewOrderMutation();
   const [comment, setComment] = useState("Write any message");
   const [cartProducts, setCartProducts] = useState([]);
-  
-  const dispatch=useDispatch()
-  const orderBodyConvert = (cartProducts) => {
-    debugger;
-    const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
-    // let total=cartProducts.map(val=>val.map(value=>value.productPrice))
-    // val.slider.showProducts[0].products
-    // console.log("total>>>",total)
 
+  const dispatch = useDispatch();
+ 
+  const orderBodyConvert = (cartProducts) => {
+    const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
     return cartProducts.map((val) => {
       let total = val.slider.showProducts[0].products.map(
         (val) => val.productPrice
@@ -25,7 +21,6 @@ function CartTab() {
         (previousScore, currentScore, index) => previousScore + currentScore,
         0
       );
-      console.log("total/>>", total);
 
       return {
         employeeId: val.id,
@@ -86,12 +81,11 @@ function CartTab() {
       setCartProducts(getLocalStorageCartData);
     }
   }, []);
-console.log("cart products",cartProducts)
+  console.log("cart products", cartProducts);
   return (
     <div>
       <h1 className="text-3xl font-semibold mb-2">Cart</h1>
       {cartProducts.map((item, index) => {
-     
         return (
           <div
             key={item.id}
@@ -118,27 +112,24 @@ console.log("cart products",cartProducts)
                 {/* <p className="text-sm text-gray-500">Gender: {item.gender} </p> */}
                 {item?.slider?.showProducts[0].products.map((val) => {
                   return (
-                 <div>
-                     <div className="mt-2">
-                      <h2 className="text-lg font-bold text-gray-700">
-                        {" "}
-                        {val.productName}{" "}
-                      </h2>
+                    <div>
+                      <div className="mt-2">
+                        <h2 className="text-lg font-bold text-gray-700">
+                          {" "}
+                          {val.productName}{" "}
+                        </h2>
 
-                      <p className="text-sm text-gray-500 ">
-                        Price : {val.productPrice}{" "}
-                      </p>
-                     
+                        <p className="text-sm text-gray-500 ">
+                          Price : {val.productPrice}{" "}
+                        </p>
+                      </div>
                     </div>
-                   
-                 </div>
                   );
                 })}
                 <p className="text-sm font-bold  mt-5 ">
-                     Total Billed : {item.totalBilled}{" "}
-                   </p>
+                  Total Billed : {item.totalBilled}{" "}
+                </p>
               </div>
-              
             </div>
             {/* <div className="flex items-center mt-4 sm:mt-0">
               <div className="flex flex-col items-center mr-4">

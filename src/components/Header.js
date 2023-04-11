@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { Cart, User, Carret, View } from "../assets/images/index.js";
 import { useDispatch, useSelector } from "react-redux";
 import { userRemove } from "../redux-slice/UserSliceAuth.js";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function Header() {
   const [dropdown, setDropdown] = useState(false);
   const dispatch=useDispatch()
+  const navigate=useNavigate()
   const user = useSelector((auth) => auth.authUser.user);
-  const userName = user?.result?.name;
+  console.log("user>>>>",user)
+  const userName = user?.name;
  let userRole= ()=>{
-    switch (user?.result?.role) {
+    switch (user?.role) {
         case "manager":
           return "managerEmail";
           break;
@@ -25,9 +29,13 @@ function Header() {
           
       }
  }
-  const userEmail = user?.result[userRole()];
+    let userEmail = user?.result[userRole()];
+    
+
+  
 const signout=()=>{
     dispatch(userRemove())
+    navigate("/login?role=manager")
 }
   return (
     <div className="fixed top-0 left-0 w-full flex items-center justify-between bg-black text-white py-3 px-5">
