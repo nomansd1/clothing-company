@@ -39,7 +39,6 @@ function App() {
           <Route path="/employee" element={<Employee />} />
           <Route path="/admin" element={<AdminLayout />} />
           <Route path="/customer" element={<Layout />} />
-          <Route path="/modal" element={<TestModal />} />
         </Routes>
      
     </div>

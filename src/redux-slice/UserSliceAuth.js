@@ -4,7 +4,7 @@ import { SignIn } from "./middleware/authMiddleware";
 // import { getFromLocalStorage } from "../../utils";
 
 let user =JSON.parse(localStorage.getItem("user"));
-user.result={...user.result,role:localStorage.getItem("role")}
+// user.result={...user.result,role:localStorage.getItem("role")}
 console.log("user",user)
 const initialState = {
   authErr: "",
