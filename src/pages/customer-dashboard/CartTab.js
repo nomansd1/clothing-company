@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { p1 } from "../../assets/images/index";
 import { useAddNewOrderMutation } from "../../apis/companyManager/index";
+import { showPopup, errorPopup } from "../../redux-slice/UserSliceAuth";
+import { useDispatch } from "react-redux";
+
 function CartTab() {
   const [addNewOrder, response] = useAddNewOrderMutation();
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState("Write any message");
   const [cartProducts, setCartProducts] = useState([]);
-  console.log("res", response);
-  const orderBodyConvert = (cartProducts) => {
-    debugger;
-    const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
-    // let total=cartProducts.map(val=>val.map(value=>value.productPrice))
-    // val.slider.showProducts[0].products
-    // console.log("total>>>",total)
 
+  const dispatch = useDispatch();
+ 
+  const orderBodyConvert = (cartProducts) => {
+    const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
     return cartProducts.map((val) => {
       let total = val.slider.showProducts[0].products.map(
         (val) => val.productPrice
@@ -21,12 +21,11 @@ function CartTab() {
         (previousScore, currentScore, index) => previousScore + currentScore,
         0
       );
-      console.log("total/>>", total);
 
       return {
         employeeId: val.id,
         products: val.slider.showProducts[0].products,
-        id:val.slider.showProducts[0]._id,
+        id: val.slider.showProducts[0]._id,
         companyName: "ajjs",
         bill: total,
         quantity: 5,
@@ -37,25 +36,27 @@ function CartTab() {
   };
   const createOrder = () => {
     let orderData = orderBodyConvert(cartProducts);
-    console.log("orer?", orderData);
 
     if (orderData.length > 0) {
-      //  remove cart item on rder created
+      //  remove cart item on order created
       addNewOrder(orderData)
         .unwrap()
         .then((res) => {
-          console.log("res", res);
-          alert("Order created");
+          dispatch(
+            showPopup({ state: true, message: "Order sucessfully created" })
+          );
+
           setComment(" ");
           localStorage.removeItem("addToCart");
           setCartProducts([]);
         })
         .catch((error) => {
           console.log(error);
-          alert("error while creating order");
+
+          dispatch(errorPopup("plz refresh page and try again"));
         });
     } else {
-      alert("Add Item First ");
+      dispatch(errorPopup({ state: true, message: "Add Item First" }));
     }
   };
   const removeCartItem = (id) => {
@@ -80,12 +81,11 @@ function CartTab() {
       setCartProducts(getLocalStorageCartData);
     }
   }, []);
-
+  console.log("cart products", cartProducts);
   return (
     <div>
       <h1 className="text-3xl font-semibold mb-2">Cart</h1>
       {cartProducts.map((item, index) => {
-        console.log("add to cart ", item);
         return (
           <div
             key={item.id}
@@ -112,18 +112,23 @@ function CartTab() {
                 {/* <p className="text-sm text-gray-500">Gender: {item.gender} </p> */}
                 {item?.slider?.showProducts[0].products.map((val) => {
                   return (
-                    <div className="mt-2">
-                      <h2 className="text-lg font-bold text-gray-700">
-                        {" "}
-                        {val.productName}{" "}
-                      </h2>
+                    <div>
+                      <div className="mt-2">
+                        <h2 className="text-lg font-bold text-gray-700">
+                          {" "}
+                          {val.productName}{" "}
+                        </h2>
 
-                      <p className="text-sm text-gray-500 ">
-                        Price : {val.productPrice}{" "}
-                      </p>
+                        <p className="text-sm text-gray-500 ">
+                          Price : {val.productPrice}{" "}
+                        </p>
+                      </div>
                     </div>
                   );
                 })}
+                <p className="text-sm font-bold  mt-5 ">
+                  Total Billed : {item.totalBilled}{" "}
+                </p>
               </div>
             </div>
             {/* <div className="flex items-center mt-4 sm:mt-0">

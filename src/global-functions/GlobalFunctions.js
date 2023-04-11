@@ -31,6 +31,7 @@ export const orderTableDataFormatConverter = (data) => {
   debugger;
 
   let tableData = data[0].orders.map((val, i) => {
+    console.log("val",val.products)
     return {
       SNO: i + 1,
       id: val._id,
@@ -84,14 +85,14 @@ export const budgetRequestTableDataFormatConverter = (datas) => {
 
 
 export const employeeOrderBudgetFormatConverter = (data) => {
-  let tableData = data.map((val, i) => {
+  let tableData = data?.map((val, i) => {
     return {
       SNO: i + 1,
       id: val._id,
       name: val.employeeName,
       budget: val.budget,
       allocateBudget: {value:`${0}`,showBtn:true},
-      slider: { showProducts: val.result, name: "Show Products" },
+      slider: { showProducts: val?.products[0].products,productId:val.products[0]._id, name: "Show Products" },
       action: { name: "Add Order", showProducts: [] },
     };
   });

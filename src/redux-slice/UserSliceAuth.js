@@ -3,14 +3,22 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { SignIn } from "./middleware/authMiddleware";
 // import { getFromLocalStorage } from "../../utils";
 
-let user =JSON.parse(localStorage.getItem("user"));
-// user.result={...user.result,role:localStorage.getItem("role")}
-console.log("user",user)
+let user = JSON.parse(localStorage.getItem("user"));
+
 const initialState = {
   authErr: "",
   loading: false,
   user: user != (undefined || null) ? user : {},
-  userLoggedIn: user?true:false,
+  userLoggedIn: user ? true : false,
+  // successPopup:false
+  successPopup: {
+    state: false,
+    message: "",
+  },
+  errorPopup: {
+    state: false,
+    message: "",
+  },
 };
 
 export const auth = createSlice({
@@ -24,21 +32,42 @@ export const auth = createSlice({
     userLoggedInState: (state, { payload }) => {
       state.userLoggedIn = payload;
     },
-    errorRemove:(state)=>{
-        state.authErr=""
-    }
+    userRemove: (state, { payload }) => {
+      state.userLoggedIn = false;
+      state.user = {};
+      localStorage.removeItem("role");
+      localStorage.removeItem("user");
+    },
+    errorRemove: (state) => {
+      state.authErr = "";
+    },
+    showPopup: (state, { payload }) => {
+      state.successPopup = {
+        state: true,
+        message: payload.message,
+      };
+    },
+    errorPopup: (state, { payload }) => {
+      state.errorPopup = {
+        state: true,
+        message: payload.message,
+      };
+    },
+    hidePopup: (state) => {state.successPopup.state = false;
+      state.errorPopup.state=false
+  },
   },
 
   extraReducers: {
     [SignIn.pending]: (state) => {
       state.loading = true;
     },
-    [SignIn.fulfilled]: (state, payload ) => {
+    [SignIn.fulfilled]: (state, {payload}) => {
       console.log("user >", payload);
       state.loading = false;
       state.authErr = "";
       state.user = payload;
-      state.userLoggedIn=true
+      state.userLoggedIn = true;
     },
     [SignIn.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -62,6 +91,14 @@ export const auth = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { InvalidUserName, errorRemove, userLoggedInState } = auth.actions;
+export const {
+  InvalidUserName,
+  errorRemove,
+  userLoggedInState,
+  showPopup,
+  userRemove,
+  hidePopup,
+  errorPopup
+} = auth.actions;
 
 export default auth.reducer;

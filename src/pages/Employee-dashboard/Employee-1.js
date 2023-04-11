@@ -14,13 +14,19 @@ import {
   p10,
   p11,
 } from "../../assets/images/index";
-import { useSelector } from "react-redux";
-import { useGetEmployeesProductsQuery,useEmployeeRequestBudgetIncrementMutation,useAddNewOrderMutation } from "../../apis/companyManager/index";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useEmployeeGetProductQuery,
+  useEmployeeRequestBudgetIncrementMutation,
+  useAddNewOrderMutation,
+} from "../../apis/companyManager/index";
 import { globalFunctions } from "../../global-functions/GlobalFunctions";
 import { tableStructureData } from "../../utils/TableStructureData";
+import { showPopup, errorPopup } from "../../redux-slice/UserSliceAuth";
+import { Header } from "../../components";
 
 const Index = () => {
-  const { data, error, isLoading } = useGetEmployeesProductsQuery();
+  const { data, error, isLoading } = useEmployeeGetProductQuery();
   const [addNewOrder, responseOrder] = useAddNewOrderMutation();
   const [budgetRequest, response] = useEmployeeRequestBudgetIncrementMutation();
 
@@ -53,7 +59,6 @@ const Index = () => {
   };
   const addMoreProduct = (products) => {
     // debugger
-    console.log("peoducts", products);
     let emp = selectedEmployee.slider.showProducts[0].products;
     const obj = { ...selectedEmployee };
     emp = [...emp, products];
@@ -69,94 +74,114 @@ const Index = () => {
     let orderData = orderBodyConvert(cartProducts);
     console.log("orer?", orderData);
 
-      addNewOrder([orderData])
-        .unwrap()
-        .then((res) => {
-          console.log("res", res);
-          alert("Order created");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("error while creating order");
-        });
-   
+    addNewOrder([orderData])
+      .unwrap()
+      .then((res) => {
+        console.log("res", res);
+        dispatch(showPopup({ state: true, message: "Order Created" }));
+      })
+      .catch((error) => {
+        console.log("error ", error.status);
+        if (error.status == 400) {
+          dispatch(
+            errorPopup({ state: true, message: "Budget is not insufficient" })
+          );
+        } else {
+          dispatch(
+            errorPopup({
+              state: true,
+              message: "There is some issue , try again ",
+            })
+          );
+        }
+      });
   };
   const addItem = (row) => {
-   orderBodyConvert(row);
-   createOrder(row)
-  
+    orderBodyConvert(row);
+    createOrder(row);
   };
-
 
   const updatedInput = (selectedInput) => {
     console.log("selected Input", selectedInput);
     setInputBudgetRequest(selectedInput);
   };
-
+  const dispatch = useDispatch();
   const updateBudgetF = () => {
     if (inputBudgetRequest || inputBudgetRequest.value < 0) {
       const updatedBudget = {
         employeeId: inputBudgetRequest.inputId,
         requestAmount: inputBudgetRequest.value,
-      }
-      
+      };
+
       budgetRequest(updatedBudget)
         .unwrap()
         .then((res) => {
           console.log("res", res);
-          alert("budget Request Fired ");
+          // alert("budget Request Fired ");
+
+          dispatch(
+            showPopup({
+              state: true,
+              message: "Manager has notified ,about your request",
+            })
+          );
           // setComment("");
         })
         .catch((error) => {
           console.log(error);
-          alert("error while updating budget");
+          // alert("error while updating budget");
+          dispatch(
+            errorPopup({
+              state: true,
+              message: "You have already created request or try after refresh",
+            })
+          );
         });
     } else {
-      alert("There is issue with budget Input ");
+      dispatch(
+        errorPopup({ state: true, message: "Input Value is not correct" })
+      );
     }
   };
 
   const orderBodyConvert = (cartProducts) => {
-    console.log("order",cartProducts)
-    debugger;
+    console.log("order", cartProducts);
+    // debugger;
     const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
-   
-      let total = cartProducts.slider.showProducts[0].products.map(
-        (val) => val.productPrice
-      );
-      total = total.reduce(
-        (previousScore, currentScore, index) => previousScore + currentScore,
-        0
-      );
 
-      return {
-        employeeId: cartProducts.id,
-        products: cartProducts.slider.showProducts[0].products,
-        id:cartProducts.slider.showProducts[0]._id,
-        companyName: "ajjs",
-        bill: total,
-        quantity: 5,
-        companyId: companyId,
-        comment:"Employee Created Order By Himself",
-      };
+    let total = cartProducts.slider.showProducts.map((val) => val.productPrice);
+    total = total.reduce(
+      (previousScore, currentScore, index) => previousScore + currentScore,
+      0
+    );
+
+    return {
+      employeeId: cartProducts.id,
+      products: cartProducts.slider.showProducts,
+      id: cartProducts.slider.productId._id,
+      companyName: "ajjs",
+      bill: total,
+      quantity: 5,
+      companyId: companyId,
+      comment: "Employee Created Order By Himself",
     };
-  
-
+  };
 
   useEffect(() => {
     let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
-    debugger
     if (data != undefined && data.length != 0) {
-      let tableDataConvert = globalFunctions.employeeOrderBudgetFormatConverter(data);
+      let tableDataConvert =
+        globalFunctions.employeeOrderBudgetFormatConverter(data);
+      console.log("table", tableDataConvert);
       setTableData(tableDataConvert);
     }
   }, [data]);
 
   return (
-    <div className="px-auto py-9" style={{ width: "80%", margin: "auto auto" }}>
-      <h1 className=" py-3 mb-9 text-2xl font-semibold">Employee Panel</h1>
-
-      <Table
+    <div className="px-auto  mx-auto w-11/12" >
+      <Header />
+     <div className="mt-12 py-12">
+     <Table
         tableData={tableData}
         setTableData={setTableData}
         columns={tableStructureData.employeeOrderBudgetColumns}
@@ -168,8 +193,8 @@ const Index = () => {
         setInputBudgetRequest={setInputBudgetRequest}
         updatedInput={updatedInput}
         updateBudgetF={updateBudgetF}
-        
       />
+     </div>
 
       <ProductDrawer
         show={showDrawer}

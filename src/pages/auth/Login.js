@@ -3,7 +3,8 @@ import { login, logo } from "../../assets/images";
 import { SignIn } from "../../redux-slice/middleware/authMiddleware";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { errorRemove } from "../../redux-slice/UserSliceAuth";
+import { errorRemove,showPopup, errorPopup  } from "../../redux-slice/UserSliceAuth";
+
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,15 +14,27 @@ function Login() {
   console.log("auth",auth)
   const navigate=useNavigate();
   const dispatch = useDispatch();
-  console.log(">>>",window.location.pathname)
   const onSubmit = (e) => {
-
+    debugger
+    let user;
     e.preventDefault();
     if (email != "" && password != "") {
-      const user = {
-        managerEmail:email,
-        managerPassword:password,
-      };
+       if(role=="manager" || role=="manager#"){
+        user = {
+          managerEmail:email,
+          managerPassword:password,
+        }
+       }else if (role=="employee"){
+        user = {
+          employeeEmail:email,
+          employeePassword:password,
+        };
+       }else{
+        user = {
+          managerEmail:email,
+          managerPassword:password,
+        };
+       }
       console.log("user",user)
       dispatch(
         SignIn({user,navigate,role}));

@@ -12,6 +12,7 @@ function PastOrderTab() {
   useEffect(() => {
     // console.log("get",getLocalStorageCartData)
     if (data != undefined && data.length !=0) {
+      console.log("past ",data)
       let tableDataConvert =
         globalFunctions.orderTableDataFormatConverter(data);
       console.log("past orders", tableDataConvert);

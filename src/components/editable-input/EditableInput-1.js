@@ -22,7 +22,7 @@ function EditableInput({
     updateBudgetF();
   };
   useEffect(() => {
-    debugger;
+    // debugger;
 
     updatedInput(edit);
   }, [edit]);

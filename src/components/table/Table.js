@@ -16,27 +16,26 @@ function Table({
   openDrawer,
   addItem,
   hideButtons,
-  setInputBudget
-  ,inputBudget,
+  setInputBudget,
+  inputBudget,
   setInputSelectedResult,
   inputSelectedResult,
   inputBudgetRequest,
   setInputBudgetRequest,
   updatedInput,
   updateBudgetF,
-  budgetDecisionF
+  budgetDecisionF,
 }) {
-  
   const [filterDrop, setFilterDrop] = useState(false);
   const [sortOrder, setSortOrder] = useState("ascending");
   const [searchTerm, setSearchTerm] = useState("");
   const [typeAction, setTypeAction] = useState(false);
   const [typeSlider, setTypeSlider] = useState(false);
 
+  const role = localStorage.getItem("role");
   // sorting functionality
   const sortData = (data, sortOrder) => {
     const sortedData = [...tableData];
-    console.log("table<<",sortedData)
     sortedData.sort((a, b) => {
       if (sortOrder === "ascending") {
         return a.budget - b.budget;
@@ -196,7 +195,7 @@ function Table({
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((row,i) => (
+            {filteredData.map((row, i) => (
               <tr key={row.id} className="bg-white border-b hover:bg-gray-50">
                 <td scope="col" className="px-2 py-3">
                   {row.SNO}
@@ -244,36 +243,80 @@ function Table({
 
                 {row.slider ? (
                   <td className="px-6 py-4 relative">
-                    {row?.slider?.showProducts[0].products.length==0 &&<h1>Products Are Ordered</h1>}
+                    {role === "employee"
+                      ? row.slider.showProducts.length == 0  && (
+                        <h1>Add Products To Buy</h1>
+                      ):""}
+                      {
+                     role=="manager"?  row.slider.showProducts[0].products.length == 0 && (
+                          <h1>Add Products To Buy</h1>
+                        ):""
+                     }
                     <Slider
                       {...sliderSettings}
                       className="!mx-auto w-full   min-w-[500px] max-w-[500px]"
                     >
-                     {row.slider?.showProducts?.map((val, i) => {
-                        return val?.products.map((val, i) => (
-                          <div
-                            key={val._id}
-                            className="w-[7.5rem] h-[7.5rem] max-w-[7.5rem] rounded-md cursor-pointer relative"
-                          >
-                            <img
-                              src={val.productImage}
-                              alt=""
-                              className="w-full h-full rounded-md"
-                            />
-                            <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-100 flex flex-col justify-center items-center rounded-md transition-all duration-500 ease-in-out">
-                              <span className="text-xs text-white text-center font-semibold">
-                                {val.productName}
-                              </span>
-                              <div>
-                                {" "}
+                      {role === "manager" ? (
+                        row.slider.showProducts.map((val, i) => {
+                        return  val.products.map((val, i) => (
+                            <div
+                              key={val._id}
+                              className="w-[7.5rem] h-[7.5rem] max-w-[7.5rem] rounded-md cursor-pointer relative"
+                            >
+                              <img
+                                src={val.productImage}
+                                alt=""
+                                className="w-full h-full rounded-md"
+                              />
+                              <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-100 flex flex-col justify-center items-center rounded-md transition-all duration-500 ease-in-out">
                                 <span className="text-xs text-white text-center font-semibold">
-                                  Price : {val.productPrice}
+                                  {val.productName}
                                 </span>
+                                <div>
+                                  {" "}
+                                  <span className="text-xs text-white text-center font-semibold">
+                                    Price : {val.productPrice}
+                                  </span>
+                                </div>
+                                <div>
+                                  {" "}
+                                  <span className="text-xs text-white text-center font-semibold">
+                                    Quantity : {val.productQuantity != undefined?val.productQuantity:1}
+                                  </span>
+                                </div>
                               </div>
                             </div>
+                          ));
+                        })
+                      ) : row.slider.showProducts.map((val,i)=>(
+                        <div
+                        key={val._id}
+                        className="w-[7.5rem] h-[7.5rem] max-w-[7.5rem] rounded-md cursor-pointer relative"
+                      >
+                        <img
+                          src={val.productImage}
+                          alt=""
+                          className="w-full h-full rounded-md"
+                        />
+                        <div class="w-full h-full absolute top-0 left-0 bg-gray-900 opacity-0 hover:opacity-100 flex flex-col justify-center items-center rounded-md transition-all duration-500 ease-in-out">
+                          <span className="text-xs text-white text-center font-semibold">
+                            {val.productName}
+                          </span>
+                          <div>
+                            {" "}
+                            <span className="text-xs text-white text-center font-semibold">
+                              Price : {val.productPrice}
+                            </span>
                           </div>
-                        ));
-                      })}
+                          <div>
+                            {" "}
+                            <span className="text-xs text-white text-center font-semibold">
+                              Quantity : {val.productQuantity}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      ))}
                     </Slider>
                   </td>
                 ) : (
@@ -281,17 +324,30 @@ function Table({
                 )}
                 {row.bill ? <td className="px-6 py-4">{row.bill}</td> : ""}
 
-                {inputBudgetRequest != undefined? <td className="px-6 py-4">
-              
-                    <EditableInput inputBudgetRequest={inputBudgetRequest} updateBudgetF={updateBudgetF}  value={row.budget} id={row.id} updatedInput={updatedInput}   />
-                    </td >:
-                 <td className="px-6 py-4">{row.budget}</td> }
-                
-                
+                {inputBudgetRequest != undefined ? (
+                  <td className="px-6 py-4">
+                    <EditableInput
+                      inputBudgetRequest={inputBudgetRequest}
+                      updateBudgetF={updateBudgetF}
+                      value={row.budget}
+                      id={row.id}
+                      updatedInput={updatedInput}
+                    />
+                  </td>
+                ) : (
+                  <td className="px-6 py-4">{row.budget}</td>
+                )}
+
                 {/* {row.allocateBudget ? <td className="px-6 py-4">{row.allocateBudget}</td> : ""} */}
                 {row.allocateBudget ? (
                   <td className="px-6 py-4">
-                   <EditableInput showBtn={row.allocateBudget.showBtn} updateBudgetF={updateBudgetF}  id={row.id} value={row.allocateBudget.value} updatedInput={updatedInput}   />
+                    <EditableInput
+                      showBtn={row.allocateBudget.showBtn}
+                      updateBudgetF={updateBudgetF}
+                      id={row.id}
+                      value={row.allocateBudget.value}
+                      updatedInput={updatedInput}
+                    />
                   </td>
                 ) : (
                   ""
@@ -318,24 +374,31 @@ function Table({
                 ) : (
                   ""
                 )}
-                    {row.selectBudgetAprroval ? (
-                
-                <DoubleCheckbox budgetDecisionF={budgetDecisionF} i={i} row={row}  />
-               ) : (
-                 ""
-               )}
-                {row.select ? (
-                         <DoubleCheckbox  budgetDecisionF={budgetDecisionF} i={i} row={row}   />
-                //   <td className="px-6 py-4">
-                //   <label class="relative inline-flex items-center  cursor-pointer">
-                //     <input type="checkbox" onChange={()=>{setInputSelectedResult(!inputSelectedResult)}} checked={inputSelectedResult} class="sr-only peer" />
-                //       <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                //   </label>
-                // </td>
+                {row.selectBudgetAprroval ? (
+                  <DoubleCheckbox
+                    budgetDecisionF={budgetDecisionF}
+                    i={i}
+                    row={row}
+                  />
                 ) : (
                   ""
                 )}
-             
+                {row.select ? (
+                  <DoubleCheckbox
+                    budgetDecisionF={budgetDecisionF}
+                    i={i}
+                    row={row}
+                  />
+                ) : (
+                  //   <td className="px-6 py-4">
+                  //   <label class="relative inline-flex items-center  cursor-pointer">
+                  //     <input type="checkbox" onChange={()=>{setInputSelectedResult(!inputSelectedResult)}} checked={inputSelectedResult} class="sr-only peer" />
+                  //       <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  //   </label>
+                  // </td>
+                  ""
+                )}
+
                 {typeAction ? (
                   <td className="px-6 py-4">
                     <button
