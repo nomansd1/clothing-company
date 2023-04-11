@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { managerLogin, employeeLogin, adminLogin } from "../../apis";
+import { showPopup } from "../UserSliceAuth";
 
 export const SignIn = createAsyncThunk(
   "SignIn",
@@ -27,7 +28,9 @@ export const SignIn = createAsyncThunk(
         });
       }
       localStorage.setItem("user", JSON.stringify(res.data));
-      alert(res.data.message);
+      dispatch(
+        showPopup({ state: true, message:res.data.message })
+      );
 
       setTimeout(() => {
         if (thunkAPI.role === "manager") {

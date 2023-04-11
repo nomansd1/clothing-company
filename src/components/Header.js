@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Cart, User, Carret, View } from "../assets/images/index.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { userRemove } from "../redux-slice/UserSliceAuth.js";
 
 function Header() {
   const [dropdown, setDropdown] = useState(false);
-
+  const dispatch=useDispatch()
   const user = useSelector((auth) => auth.authUser.user);
   const userName = user?.result?.name;
  let userRole= ()=>{
@@ -20,11 +21,14 @@ function Header() {
           
     
         default:
-          break;
+          return "null"
+          
       }
  }
   const userEmail = user?.result[userRole()];
-
+const signout=()=>{
+    dispatch(userRemove())
+}
   return (
     <div className="fixed top-0 left-0 w-full flex items-center justify-between bg-black text-white py-3 px-5">
       <div className="relative flex items-center lg:w-[35%] justify-between">
@@ -79,7 +83,7 @@ function Header() {
                     <span className="material-symbols-rounded !text-md">
                       logout
                     </span>
-                    <span className="ml-3">Sign out</span>
+                    <span className="ml-3" onClick={()=>{signout()}}>Sign out</span>
                   </a>
                 </li>
               </ul>

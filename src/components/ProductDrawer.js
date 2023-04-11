@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Check } from "../assets/images";
+import { showPopup,errorPopup } from "../redux-slice/UserSliceAuth";
+import { useDispatch } from "react-redux";
 
 function ProductDrawer(props) {
   const { addMoreProduct } = props;
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(new Array(props.img.length).fill(0));
+  const dispatch=useDispatch()
+
   const productData = {
     quantity: quantity[selectedImage],
     productImage:"https://cdn.mukama.com/31812/formal-friday-ultrafine-merino-t-shirt-black.jpg",
@@ -25,6 +29,7 @@ function ProductDrawer(props) {
 
   const selectedProduct = () => {
     addMoreProduct(productData);
+    dispatch(showPopup({state:true,message:"Product Added"}))
   };
 
   const increaseQuantity = (index) => {
@@ -98,7 +103,7 @@ function ProductDrawer(props) {
                     className="px-3 py-1.5 mx-auto rounded-l-lg"
                     onClick={selectedProduct}
                   >
-                    Add to Cart
+                    Add Product In List
                   </button>
                 </div>
               )}

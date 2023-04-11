@@ -4,7 +4,8 @@ import { baseURL, API } from "../../config";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
-const employeeId = JSON.parse(localStorage.getItem("user"))?.result?._id;
+const employeeId = "64351a67755b703a82f45f0b"
+
 
 // const companyId="642b1cf70cbb7acac958d471"
 export const ManagerApi = createApi({
@@ -52,6 +53,14 @@ export const ManagerApi = createApi({
     getTotalEmployeesLengthbyCompanyId: builder.query({
       query: () => `/employee/get-Totalemployee?companyId=${companyId}`,
     
+    }),
+    getCompanyDetails: builder.query({
+      query: () => `/company/getCompanyDetails?companyId=${companyId}`,
+   
+    }),
+    employeeGetProduct: builder.query({
+      query: () => `/product/get-productsbyemployeeId?employeeId=${employeeId}`,
+   
     }),
     employeeRequestBudgetIncrement: builder.mutation({
       query: (payload) => {
@@ -145,7 +154,9 @@ export const {
   useEmployeeRequestBudgetIncrementMutation,
   useGetOrdersForEmployeesQuery,
   useGetTotalEmployeesLengthQuery,
-  useGetTotalOrdersLengthQuery
+  useGetTotalOrdersLengthQuery,
+  useGetCompanyDetailsQuery,
+  useEmployeeGetProductQuery
 } = ManagerApi;
 
 export const managerLogin = (data) =>

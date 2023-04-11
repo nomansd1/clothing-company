@@ -15,13 +15,25 @@ function Login() {
   const dispatch = useDispatch();
   console.log(">>>",window.location.pathname)
   const onSubmit = (e) => {
-
+    let user;
     e.preventDefault();
     if (email != "" && password != "") {
-      const user = {
-        managerEmail:email,
-        managerPassword:password,
-      };
+       if(role=="manager"){
+        user = {
+          managerEmail:email,
+          managerPassword:password,
+        }
+       }else if (role=="employee"){
+        user = {
+          employeeEmail:email,
+          employeePassword:password,
+        };
+       }else{
+        user = {
+          managerEmail:email,
+          managerPassword:password,
+        };
+       }
       console.log("user",user)
       dispatch(
         SignIn({user,navigate,role}));

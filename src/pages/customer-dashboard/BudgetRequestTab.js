@@ -6,12 +6,17 @@ import {
 import Table from "../../components/table/Table";
 import { globalFunctions } from "../../global-functions/GlobalFunctions";
 import { tableStructureData } from "../../utils/TableStructureData";
+import { ToastContainer, toast } from "react-toastify";
+import { showPopup,errorPopup } from "../../redux-slice/UserSliceAuth";
+
+import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
 
 const BudgetRequestTab = () => {
   const { data, error, isLoading } = useGetBudgetRequestQuery();
   const [actionBudgetRequest, response] = useActionBudgetRequestMutation();
   console.log("budgetv tab data----", data, "loading", isLoading);
-
+ const dispatch=useDispatch();
   const [tableData, setTableData] = useState([]);
   const [inputBudget, setInputBudget] = useState(0);
 
@@ -23,7 +28,7 @@ const BudgetRequestTab = () => {
   };
 
   const addItem = (row) => {
-    debugger;
+    // debugger;
     console.log("row", row);
     let budgetRequestActionData = {
       requestId: row.id,
@@ -36,14 +41,15 @@ const BudgetRequestTab = () => {
       .unwrap()
       .then((res) => {
         console.log("res", res);
-        alert("budget requeste fired");
-        // setComment("");
+dispatch(showPopup({state:true,message:"Employee has notified "}))
+       
+      
       })
       .catch((error) => {
-        console.log(error);
-        alert("error while creating budget request");
+        dispatch(errorPopup({state:true,message:"Try again or refresh page"}))
+      
       });
-    // let obj= {...row}
+    
   };
 
   const budgetDecisionF = (value, row) => {
@@ -58,12 +64,12 @@ const BudgetRequestTab = () => {
     row.status = status;
     let data = [...tableData];
     let filterData = data.filter((val) => val.id != row.id);
-    let tableDataConvert =[];
-  //  if(filterData.length>0){
-  //    tableDataConvert =
-  //   globalFunctions.budgetRequestTableDataFormatConverter(filterData);
-  //  }
-    setTableData([row, ...filterData].sort((a,b)=>a.SNO-b.SNO));
+    let tableDataConvert = [];
+    //  if(filterData.length>0){
+    //    tableDataConvert =
+    //   globalFunctions.budgetRequestTableDataFormatConverter(filterData);
+    //  }
+    setTableData([row, ...filterData].sort((a, b) => a.SNO - b.SNO));
     setBudgetDescisionState(value);
   };
 
@@ -85,6 +91,8 @@ const BudgetRequestTab = () => {
   }, [data]);
   return (
     <div>
+ 
+
       <Table
         tableData={tableData}
         setTableData={setTableData}

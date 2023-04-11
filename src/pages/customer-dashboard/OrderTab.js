@@ -15,15 +15,21 @@ import {
   p10,
   p11,
 } from "../../assets/images/index";
-import { useSelector } from "react-redux";
-import { useGetEmployeesProductsQuery, useUpdateBudgetMutation } from "../../apis/companyManager/index";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  useGetEmployeesProductsQuery,
+  useUpdateBudgetMutation,
+} from "../../apis/companyManager/index";
 import { globalFunctions } from "../../global-functions/GlobalFunctions";
+import { showPopup, errorPopup } from "../../redux-slice/UserSliceAuth";
+
 
 const Index = () => {
   const { data, error, isLoading } = useGetEmployeesProductsQuery();
+  console.log("data",data)
   const [budgetUpdate, response] = useUpdateBudgetMutation();
-  console.log("data", data, "loading", isLoading);
-  
+  const dispatch = useDispatch();
+
   const [tableData, setTableData] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState([]);
   const [showDrawer, setShowDrawer] = useState(false);
@@ -43,11 +49,9 @@ const Index = () => {
     { id: 11, src: p11 },
   ];
 
-
   const updatedInput = (selectedInput) => {
     console.log("selected Input", selectedInput);
-    setInputBudgetRequest(selectedInput)
-  
+    setInputBudgetRequest(selectedInput);
   };
 
   const openDrawer = (row) => {
@@ -71,10 +75,8 @@ const Index = () => {
   };
 
   const addItem = (row) => {
-    debugger;
-    alert("product added in cart");
     let cartItems = [];
-    debugger;
+
     let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
 
     let totalBilled = row.slider.showProducts[0].products.map(
@@ -85,6 +87,7 @@ const Index = () => {
       0
     );
     console.log("totl", totalBilled);
+    let cartItemObj;
     if (totalBilled <= row.budget) {
       if (
         getLocalStorageCartData != undefined ||
@@ -93,54 +96,69 @@ const Index = () => {
         let filterData = getLocalStorageCartData.filter(
           (val) => val.id != row.id
         );
-        filterData.push(row);
+        cartItemObj={...row,totalBilled}
+        console.log("cart ",cartItemObj)
+        filterData.push(cartItemObj);
         localStorage.setItem("addToCart", JSON.stringify(filterData));
       } else {
-        cartItems.push(row);
+        cartItemObj={...row,totalBilled:totalBilled}
+        cartItems.push(cartItemObj);
+        console.log("cart ",cartItemObj)
         localStorage.setItem("addToCart", JSON.stringify(cartItems));
       }
+    dispatch(showPopup({ state: true, message: "Product added in cart" }));
+
     } else {
-      alert("Plz Increase The budget");
+      dispatch(errorPopup({ state: true, message: "budget is not enough" }));
     }
   };
 
-  const budgetDecisionF=()=>{
-  if(inputBudgetRequest || inputBudgetRequest.value <0){
-    const updatedBudget={
-      employeeId:inputBudgetRequest.inputId,
-      changeBudgetAmount:inputBudgetRequest.value
-    }
-    budgetUpdate(updatedBudget)
-      .unwrap()
-      .then((res) => {
-        console.log("res", res);
-        alert("budget increased ");
-        // setComment("");
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("error while updating budget");
-      });
-  }else{
-    alert("There is issue with budget Input ")
-  }
-  }
+  const budgetDecisionF = () => {
+    if (inputBudgetRequest || inputBudgetRequest.value < 0) {
+      const updatedBudget = {
+        employeeId: inputBudgetRequest.inputId,
+        changeBudgetAmount: inputBudgetRequest.value,
+      };
+      budgetUpdate(updatedBudget)
+        .unwrap()
+        .then((res) => {
+          console.log("res", res);
 
-  
+          dispatch(
+            showPopup({ state: true, message: "Budget Sucesssfully Increased" })
+          );
+          // setComment("");
+        })
+        .catch((error) => {
+          dispatch(
+            errorPopup({
+              state: true,
+              message: "please refresh page and try again",
+            })
+          );
+        });
+    } else {
+      dispatch(
+        errorPopup({
+          state: true,
+          message: "budget input should be positive value",
+        })
+      );
+    }
+  };
 
   useEffect(() => {
     let getLocalStorageCartData = JSON.parse(localStorage.getItem("addToCart"));
     // console.log("get",getLocalStorageCartData)
-    if (data != undefined && data.length !=0) {
-      
+    if (data != undefined && data.length != 0) {
       let tableDataConvert = globalFunctions.tableDataFormatConverter(data);
-      console.log(">>table",tableDataConvert)
+      console.log(">>table", tableDataConvert);
       setTableData(tableDataConvert);
     }
   }, [data]);
 
   return (
-     <>
+    <>
       <Table
         tableData={tableData}
         setTableData={setTableData}
@@ -152,7 +170,6 @@ const Index = () => {
         setInputBudgetRequest={setInputBudgetRequest}
         updatedInput={updatedInput}
         updateBudgetF={budgetDecisionF}
-   
       />
       <ProductDrawer
         show={showDrawer}

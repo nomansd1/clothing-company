@@ -29,7 +29,7 @@ const orderColumns = [
   { label: "Employee", type: "name" },
   { label: "Products", type: "slider" },
   { label: "Bill", type: "name" },
-  { label: "Budget", type: "name" },
+
 ];
 
 const budgetRequestColumns = [
