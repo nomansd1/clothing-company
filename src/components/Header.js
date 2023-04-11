@@ -67,7 +67,7 @@ const signout=()=>{
             <img src={Carret} alt="carret" className="ml-2 mt-1" />
           </button>
           {dropdown === true ? (
-            <div className="absolute top-8 right-0 z-10 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow mt-2.5 transition-all duration-500 ease-out">
+            <div className="absolute top-8 right-0 z-100 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow mt-2.5 transition-all duration-500 ease-out">
               <ul className="py-1 px-1 text-sm">
                 <li className="flex items-center px-4 py-2 rounded-md hover:bg-[#F3F4F6]">
                   <a className="flex items-center justify-between" href="#">

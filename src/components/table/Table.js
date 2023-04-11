@@ -87,7 +87,7 @@ function Table({
   return (
     <div>
       <h1 className="text-2xl font-semibold">{tableTitle ? tableTitle : ""}</h1>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+      <div className="relative overflow-auto shadow-md sm:rounded-lg mt-4">
         <div className="flex items-center justify-between pb-4">
           <div className="relative">
             <button
@@ -150,6 +150,9 @@ function Table({
                 </li>
               </ul>
             </div>
+            <button className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1 ml-2">
+              <span className="material-symbols-rounded text-base">refresh</span>
+            </button>
           </div>
           <label for="table-search" className="sr-only">
             Search
