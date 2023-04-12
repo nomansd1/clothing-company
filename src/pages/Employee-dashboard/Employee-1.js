@@ -59,14 +59,15 @@ const Index = () => {
   };
   const addMoreProduct = (products) => {
     // debugger
-    let emp = selectedEmployee.slider.showProducts[0].products;
+    let emp = selectedEmployee.slider.showProducts;
     const obj = { ...selectedEmployee };
     emp = [...emp, products];
-    obj.slider.showProducts = [{ products: emp }];
+    obj.slider.showProducts =  emp ;
     let updateCollection = tableData.filter(
       (val) => val.id != selectedEmployee.id
     );
     updateCollection.push(obj);
+    console.log("product",products)
 
     setTableData([...updateCollection]);
   };

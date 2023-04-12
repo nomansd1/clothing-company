@@ -311,7 +311,7 @@ function Table({
                           <div>
                             {" "}
                             <span className="text-xs text-white text-center font-semibold">
-                              Quantity : {val.productQuantity}
+                              Quantity : {1}
                             </span>
                           </div>
                         </div>

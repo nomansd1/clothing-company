@@ -6,7 +6,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const role=localStorage.getItem("role");
 let companyId;
 if(role=="manager"){
+
   companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
+  console.log("companyid",companyId)
 }else{
    companyId = JSON.parse(localStorage.getItem("user"))?.result?.companyId;
 }
@@ -51,6 +53,7 @@ export const ManagerApi = createApi({
     }),
     getTotalOrdersLength: builder.query({
       query: () => `/order/get-TotalOrder`,
+      
       providesTags: ["order"],
     }),
     getTotalOrdersLengthbyCompanyId: builder.query({
@@ -71,6 +74,7 @@ export const ManagerApi = createApi({
     }),
     employeeGetProduct: builder.query({
       query: () => `/product/get-productsbyemployeeId?employeeId=${employeeId}`,
+      providesTags: ["orders"],
    
     }),
     employeeRequestBudgetIncrement: builder.mutation({
