@@ -43,10 +43,8 @@ function Login() {
   console.log("role",role)
   useEffect(()=>{
     dispatch(errorRemove())
-const getRoleFrombrowserPath=window.location.href.replace("http://localhost:3000/login?role=","")
-console.log("ssss",getRoleFrombrowserPath)
-console.log("ssss>>>",getRoleFrombrowserPath=="http://localhost:3000/login")
-if(getRoleFrombrowserPath != "http://localhost:3000/login"){
+const getRoleFrombrowserPath=window.location.href.replace("https://clothing-company-frontened.vercel.app/login?role=","")
+if(getRoleFrombrowserPath != "https://clothing-company-frontened.vercel.app/login"){
   setRole(getRoleFrombrowserPath)
 }
   },[window.location.href])
