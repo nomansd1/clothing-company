@@ -67,7 +67,6 @@ const Index = () => {
       (val) => val.id != selectedEmployee.id
     );
     updateCollection.push(obj);
-    console.log("product",products)
 
     setTableData([...updateCollection]);
   };
@@ -148,7 +147,7 @@ const Index = () => {
   const orderBodyConvert = (cartProducts) => {
     console.log("order", cartProducts);
     // debugger;
-    const companyId = JSON.parse(localStorage.getItem("user"))?.result?.company;
+    const companyId = JSON.parse(localStorage.getItem("user"))?.result?.companyId;
 
     let total = cartProducts.slider.showProducts.map((val) => val.productPrice);
     total = total.reduce(
